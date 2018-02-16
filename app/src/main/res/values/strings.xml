@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Battleships EDAF65</string>
+
+    <string name="title_activity_main_game">MainGame</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
