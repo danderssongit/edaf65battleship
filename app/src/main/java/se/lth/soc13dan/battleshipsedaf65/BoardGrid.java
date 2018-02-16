@@ -24,6 +24,6 @@ public class BoardGrid {
     }
 
     public int hit(int row, int col) {
-
+        return 0;
     }
 }
