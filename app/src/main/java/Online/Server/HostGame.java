@@ -7,13 +7,20 @@ import android.support.v7.widget.GridLayout;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import se.lth.soc13dan.battleshipsedaf65.R;
+import se.lth.soc13dan.battleshipsedaf65.Square;
 
 public class HostGame extends AppCompatActivity {
     private static final int NBR_ITEMS = 100;
     private GridLayout mGrid;
+    private Random rand;
+    private Square selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,14 +30,27 @@ public class HostGame extends AppCompatActivity {
         mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener());
 
+        Button shootButton = (Button) this.findViewById(R.id.angry_btn);
+        shootButton.setOnClickListener(new ButtonListener());
         final LayoutInflater inflater = LayoutInflater.from(this);
-        for (int i = 0; i < NBR_ITEMS; i++) {
+        for (int i = 1; i <= NBR_ITEMS; i++) {
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
             final TextView text = itemView.findViewById(R.id.text);
+            itemView.setTag(new Square(i));
             itemView.setOnLongClickListener(new LongPressListener());
-            text.setText(String.valueOf(i + 1));
+            itemView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    final TextView text = v.findViewById(R.id.text);
+                    selected = (Square)v.getTag();
+                    text.setText(String.valueOf("X"));
+
+                }
+            });
+            text.setText(String.valueOf(i));
             mGrid.addView(itemView);
         }
+
+
     }
 
     class LongPressListener implements View.OnLongClickListener {
@@ -87,6 +107,19 @@ public class HostGame extends AppCompatActivity {
                 index = mGrid.getChildCount() - 1;
             }
             return index;
+        }
+
+
+
+    }
+
+    class ButtonListener implements android.view.View.OnClickListener {
+        public void onClick(View v) {
+            View parent = (View)v.getParent();
+            if (parent != null) {
+                Button p1_button = (Button)findViewById(R.id.angry_btn);
+                p1_button.setText(selected.getCoord());
+            }
         }
     }
 }
