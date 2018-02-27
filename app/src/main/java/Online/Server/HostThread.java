@@ -14,14 +14,15 @@ public class HostThread extends GameThread {
     private Handler turnHandler;
     private Monitor m;
 
-    public HostThread(Handler turnHandler, Monitor m){
+    public HostThread(Handler turnHandler, Monitor m) {
         this.turnHandler = turnHandler;
         this.m = m;
         id = 0;
     }
 
-    public void run(){
-        while(true){
+    @Override
+    public void run() {
+        while (true) {
             Message msg = new Message();
             try {
                 int move = 1; //change what move it is here
