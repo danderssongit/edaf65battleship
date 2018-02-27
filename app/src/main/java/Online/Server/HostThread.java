@@ -10,8 +10,7 @@ import Online.GameThread;
  */
 
 public class HostThread extends GameThread {
-
-    private int  id;
+    private int id;
     private Handler turnHandler;
     private Monitor m;
 
@@ -24,13 +23,13 @@ public class HostThread extends GameThread {
     public void run(){
         while(true){
             Message msg = new Message();
-            try{
+            try {
                 int move = 1; //change what move it is here
                 msg.what = move;
                 turnHandler.sendMessage(msg);
-
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
-
 }

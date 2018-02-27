@@ -26,11 +26,8 @@ public class Monitor {
         return turn;
     }
 
-
-
     public synchronized void changeTurn() {
-        turn = (turn + 1) % 2 // swaps between 1 and 0
+        turn = (turn + 1) % 2; // swaps between 1 and 0
         notifyAll();
     }
-
 }

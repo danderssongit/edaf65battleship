@@ -5,25 +5,25 @@ package se.lth.soc13dan.battleshipsedaf65;
  */
 
 public class Board {
-}
+    private int[][] board;
 
-    int [][] board = new int [10][10];
-
-
-    /** Creates a new 10x10 board.
+    /**
+     * Creates a new 10x10 board.
      * 0 = water
      * 1 = ship
      * 2 = hit
      * 3 = miss
      * 4 = already tried
      */
-    public Board(){
 
-}
+    public Board() {
+        board = new int[10][10];
+    }
+
     // kan inte returna först
-    public int fire(int row, int col){
-       int bombs = 3;
-        while (bombs != 0){
+    public int fire(int row, int col) {
+        int bombs = 3;
+        while (bombs != 0) {
             //miss
             if (board[row][col] == 0) {
                 board[row][col] = 3;
@@ -32,7 +32,7 @@ public class Board {
             }
             //hit
             if (board[row][col] == 1) {
-                board[row][col] = 2;'
+                board[row][col] = 2;
                 bombs--;
                 return 2;
             }
@@ -40,8 +40,7 @@ public class Board {
             if (board[row][col] == 2 || board[row][col] == 3) {
                 return 4;
             }
-
         }
-        return "Time to defence"
-        }
+        return 0;
     }
+}

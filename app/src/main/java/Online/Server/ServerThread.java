@@ -60,6 +60,4 @@ public class ServerThread extends GameThread {
             socket.close();
         }
     }
-
-
 }
