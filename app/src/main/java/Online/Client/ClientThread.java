@@ -18,12 +18,12 @@ import java.util.Enumeration;
 
 public class ClientThread extends Thread {
 
-    Handler turnHandler;
-    InetAddress ia;
-    DatagramSocket ds;
-    String host;
-    InetAddress destHost;
-    String broadCastHost = "224.0.50.50";
+    private Handler turnHandler;
+    private InetAddress ia;
+    private DatagramSocket ds;
+    private String host;
+    private InetAddress destHost;
+    private String broadCastHost = "224.0.50.50";
 
 
     public ClientThread(Handler turnHandler) {
@@ -51,8 +51,6 @@ public class ClientThread extends Thread {
         } catch (IOException e) {
             System.out.println("IO error " + e);
         }
-
-
     }
 
     public void run(){
@@ -91,5 +89,4 @@ public class ClientThread extends Thread {
             ds.close();
         }
     }
-
 }

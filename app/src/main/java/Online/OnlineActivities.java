@@ -1,6 +1,5 @@
 package Online;
 
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 /**
@@ -8,11 +7,16 @@ import android.support.v7.app.AppCompatActivity;
  */
 
 public class OnlineActivities extends AppCompatActivity {
+    public static final int NBR_ITEMS = 100;
     protected boolean yourTurn;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        yourTurn = false;
+//    }
+
+    public OnlineActivities() {
         yourTurn = false;
     }
 }

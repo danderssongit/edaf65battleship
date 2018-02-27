@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import java.nio.file.Files;
-
 import Online.Client.JoinGame;
 import Online.Server.HostGame;
 

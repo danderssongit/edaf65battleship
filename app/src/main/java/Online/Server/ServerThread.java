@@ -15,9 +15,9 @@ import Online.GameThread;
 public class ServerThread extends GameThread {
 
     private Monitor m;
-    MulticastSocket ms;
-    InetAddress ia;
-    DatagramSocket socket;
+    private MulticastSocket ms;
+    private InetAddress ia;
+    private DatagramSocket socket;
     private String clientAddress;
 
     public ServerThread(Monitor m){
