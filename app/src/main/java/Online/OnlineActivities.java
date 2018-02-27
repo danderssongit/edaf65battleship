@@ -12,7 +12,7 @@ public class OnlineActivities {
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
-         yourTurn = false;
+        yourTurn = false;
     }
 
 
