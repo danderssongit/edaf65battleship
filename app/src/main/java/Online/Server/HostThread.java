@@ -11,25 +11,26 @@ import Online.GameThread;
 
 public class HostThread extends GameThread {
 
-    private int  id;
+    private int id;
     private Handler turnHandler;
     private Monitor m;
 
-    public HostThread(Handler turnHandler, Monitor m){
+    public HostThread(Handler turnHandler, Monitor m) {
         this.turnHandler = turnHandler;
         this.m = m;
         id = 0;
     }
 
-    public void run(){
-        while(true){
+    @Override
+    public void run() {
+        while (true) {
             Message msg = new Message();
-            try{
-                int move = 1; //change what move it is here
-                msg.what = move;
-                turnHandler.sendMessage(msg);
 
-            }
+            int move = 1; //change what move it is here
+            msg.what = move;
+            turnHandler.sendMessage(msg);
+
+
         }
     }
 

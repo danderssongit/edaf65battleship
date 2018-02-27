@@ -10,7 +10,7 @@ public class OnlineActivities {
 
     protected boolean yourTurn;
 
-    @Override
+
     protected void onCreate(Bundle savedInstanceState){
          yourTurn = false;
     }
