@@ -8,8 +8,17 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="se.lth.soc13dan.battleshipsedaf65.MainMenu"
     android:orientation="vertical">
+
+    <android.support.v7.widget.GridLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/grid_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        app:columnCount="10"
+        />
 
     <Button
         android:id="@+id/angry_btn"
@@ -18,6 +27,8 @@
         android:textColor="#FFFFFF"
         android:textSize="30sp"
 
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp"
         android:layout_width="270dp"
         android:layout_height="60dp"
         android:background="@drawable/shoot_button"
