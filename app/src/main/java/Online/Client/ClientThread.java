@@ -17,7 +17,7 @@ import java.util.Enumeration;
  */
 
 public class ClientThread extends Thread {
-
+    private int id;
     private Handler turnHandler;
     private InetAddress ia;
     private DatagramSocket ds;
@@ -28,6 +28,7 @@ public class ClientThread extends Thread {
 
     public ClientThread(Handler turnHandler) {
         this.turnHandler = turnHandler;
+        id = 1;
         boolean done = false;
         try {
             Enumeration e = NetworkInterface.getNetworkInterfaces(); //returns a list with all interfaces
