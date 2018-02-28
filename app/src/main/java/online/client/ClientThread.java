@@ -1,4 +1,4 @@
-package Online.Client;
+package online.client;
 
 import android.os.Handler;
 import android.os.Message;
@@ -48,6 +48,7 @@ public class ClientThread extends Thread {
                 }
             }
             ia = InetAddress.getByName(host);
+            System.out.println("My Address: " + ia.toString());
 
         } catch (IOException e) {
             System.out.println("IO error " + e);
@@ -59,11 +60,15 @@ public class ClientThread extends Thread {
             ds = new DatagramSocket(8080); //create a new socket where the client and server can communicate
             byte[] buffer = (ia.toString()).getBytes();
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(broadCastHost), 8080);
+            System.out.println("SENDING PACKET");
             ds.send(packet); //send the client ip to the multicast address (server)
             byte[] recvBuf = new byte[1024];
             DatagramPacket recv = new DatagramPacket(recvBuf, recvBuf.length);
+            System.out.println("WAITING FOR PACKET");
             ds.receive(recv);
+            System.out.println("PACKET RECEIVED");
             destHost = recv.getAddress(); //save the server address
+            System.out.println("HELLO: " + destHost.toString());
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -74,7 +79,6 @@ public class ClientThread extends Thread {
         while (!this.interrupted()) {
             Message msg = Message.obtain();
             try {
-                //send stuff
             } catch (Exception e) {
                 System.out.println("IO error " + e);
 

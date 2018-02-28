@@ -1,4 +1,4 @@
-package Online;
+package online;
 
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import Online.Server.Monitor;
+import online.server.Monitor;
 import se.lth.soc13dan.battleshipsedaf65.LongPressListener;
 import se.lth.soc13dan.battleshipsedaf65.R;
 import se.lth.soc13dan.battleshipsedaf65.Square;
@@ -79,4 +79,7 @@ public class OnlineActivities extends AppCompatActivity {
     public void updateView(int squareID) {
 
     }
+
+
+
 }

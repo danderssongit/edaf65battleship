@@ -1,4 +1,4 @@
-package Online.Client;
+package online.client;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import Online.OnlineActivities;
+import online.OnlineActivities;
 import se.lth.soc13dan.battleshipsedaf65.DragListener;
 import se.lth.soc13dan.battleshipsedaf65.R;
 

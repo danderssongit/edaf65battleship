@@ -1,9 +1,9 @@
-package Online.Server;
+package online.server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import Online.OnlineActivities;
+import online.OnlineActivities;
 import se.lth.soc13dan.battleshipsedaf65.Square;
 
 /**
@@ -15,6 +15,8 @@ public class Monitor extends OnlineActivities {
     private int turn;
     private int currentTurn;
     public static HashMap<Integer, ArrayList<Square>> board;
+    private ArrayList<Square> myBoard, enemyBoard;
+
 
     public Monitor() {
         turn = 1;

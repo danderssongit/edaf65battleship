@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import Online.Client.JoinGame;
-import Online.Server.HostGame;
+import online.client.JoinGame;
+import online.server.HostGame;
 
 public class MainMenu extends AppCompatActivity {
     private Intent intent;

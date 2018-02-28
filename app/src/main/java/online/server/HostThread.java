@@ -1,9 +1,9 @@
-package Online.Server;
+package online.server;
 
 import android.os.Handler;
 import android.os.Message;
 
-import Online.GameThread;
+import online.GameThread;
 
 /**
  * Created by otto on 2018-02-21.
