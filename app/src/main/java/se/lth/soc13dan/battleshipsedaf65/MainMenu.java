@@ -6,19 +6,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import Online.Client.JoinGame;
-import Online.Server.HostGame;
-import Online.Server.Monitor;
+import online.client.JoinGame;
+import online.server.HostGame;
+import online.Monitor;
 
 public class MainMenu extends AppCompatActivity {
     private Intent intent;
+    private Monitor monitor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        final Monitor monitor = new Monitor();
+
 
         // Buttons and on click listeners
         Button hostButton = (Button) findViewById(R.id.hostButton);
@@ -26,6 +27,7 @@ public class MainMenu extends AppCompatActivity {
         hostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                monitor = new Monitor(false);
                 hostGame(monitor);
             }
         });
@@ -33,6 +35,7 @@ public class MainMenu extends AppCompatActivity {
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                monitor = new Monitor(true);
                 joinGame(monitor);
             }
         });

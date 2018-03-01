@@ -1,13 +1,14 @@
-package Online.Server;
+package online.server;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.widget.GridLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import Online.OnlineActivities;
+import online.OnlineActivities;
+
+import online.Monitor;
 import se.lth.soc13dan.battleshipsedaf65.DragListener;
 import se.lth.soc13dan.battleshipsedaf65.R;
 
@@ -22,21 +23,19 @@ public class HostGame extends OnlineActivities {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+//        final Handler turnHandler = new Handler();
+//        host = new HostThread(turnHandler, monitor);
+//        host.start();
 
-        Monitor monitor = new Monitor();
-        final Handler turnHandler = new Handler();
-        host = new HostThread(turnHandler, monitor);
-        server = new ServerThread(monitor);
-        host.start();
+        server = new ServerThread((Monitor) getIntent().getSerializableExtra("monitor"));
         server.start();
-
-
 
         TextView statusText = (TextView) findViewById(R.id.status);
         statusText.setText("Place your ships!");
+
         mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
-        setupPhase(mGrid, PLAYER_ID);
+        setupPhase(mGrid, PLAYER_ID, false);
 
         Button shootButton = (Button) this.findViewById(R.id.angry_btn);
         shootButton.setOnClickListener(new View.OnClickListener() {

@@ -1,4 +1,4 @@
-package Online;
+package online;
 
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import Online.Server.Monitor;
 import se.lth.soc13dan.battleshipsedaf65.LongPressListener;
 import se.lth.soc13dan.battleshipsedaf65.R;
 import se.lth.soc13dan.battleshipsedaf65.Square;
@@ -35,11 +34,10 @@ public class OnlineActivities extends AppCompatActivity {
         yourTurn = false;
         hostBoard = new ArrayList<>();
         clientBoard = new ArrayList<>();
-//        monitor = new Monitor();      // causes crash..?
     }
 
-    public void setupPhase(GridLayout mGrid, int playerID) {
-        ArrayList<Square> board = new ArrayList<>();
+    public void setupPhase(GridLayout mGrid, int playerID, Boolean myTurn) {
+        monitor = new Monitor(myTurn);
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
@@ -60,12 +58,15 @@ public class OnlineActivities extends AppCompatActivity {
             itemView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     square = (Square) v.getTag();
-                    if (!square.isPressed()) {
+                    if (!square.isPressed() && monitor.isMyTurn()) {
                         text.setText("o");
                         square.press();
+                        monitor.changeTurn(square.getCoord());
                         if (square.isShip()) {
                             square.hit();
                         }
+                    } else if(!monitor.isMyTurn()) {
+                        System.out.println("Not your turn...");
                     }
                 }
             });
@@ -87,7 +88,6 @@ public class OnlineActivities extends AppCompatActivity {
             }
         }
         updateView(mGrid, whatBoard(playerID));
-        monitor.changeTurn();
     }
 
     public void updateView(GridLayout mGrid, ArrayList<Square> board) {

@@ -1,8 +1,6 @@
-package Online.Server;
+package online;
 
 import java.io.Serializable;
-
-import Online.OnlineActivities;
 
 /**
  * Created by otto on 2018-02-18.
@@ -11,24 +9,33 @@ import Online.OnlineActivities;
 public class Monitor extends OnlineActivities implements Serializable {
     private int turn;
     private int currentTurn;
+    private int target;
+    private boolean myTurn;
 
-    public Monitor() {
-        turn = 1;
+    public Monitor(boolean myTurn) {
+//        turn = 1;
+        this.myTurn = myTurn;
     }
 
-    public synchronized void waitTurn(int id, int squareID) {
-        while (!(id == turn)) {
+    public synchronized int waitTurn() {
+        while (!myTurn) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        shoot(squareID);
+        return target;
     }
 
-    public synchronized void changeTurn() {
+    public synchronized void changeTurn(int i) {
         turn = (turn + 1) % 2; // swaps between 1 and 0
+        target = i;
+        myTurn = !myTurn;
         notifyAll();
+    }
+
+    public boolean isMyTurn() {
+        return myTurn;
     }
 }

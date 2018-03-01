@@ -1,12 +1,12 @@
-package Online.Server;
+package online.server;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.util.logging.Handler;
 
-import Online.GameThread;
+import online.GameThread;
+import online.Monitor;
 
 /**
  * Created by otto on 2018-02-18.
@@ -33,8 +33,11 @@ public class ServerThread extends GameThread {
 
             byte[] start = new byte[1024];
             DatagramPacket init = new DatagramPacket(start, start.length);
+            System.out.println("WAITING FOR PACKET");
             ms.receive(init);
+            System.out.println("PACKET RECEIVED");
             clientAddress = init.getAddress().getHostAddress(); //extracts the ip address from the client
+            System.out.println("TESTO: " + clientAddress.toString());
             start = "hello".getBytes();
             ms.close();
             socket = new DatagramSocket(8080); //creates a socket where the client and server can communicate
@@ -43,9 +46,19 @@ public class ServerThread extends GameThread {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         while(!this.isInterrupted()){
             try{
-                //send stuff
+                int target = m.waitTurn();
+                byte[] data = {(byte) target};
+                DatagramPacket sendPacket = new DatagramPacket(data, data.length,  InetAddress.getByName(clientAddress), 8080);
+                socket.send(sendPacket);
+                System.out.println("Shooting square: " + target);
+
+                data = new byte[1];
+                DatagramPacket receivePacket = new DatagramPacket(data, data.length);
+                socket.receive(receivePacket);
+                System.out.println("Got shot on square: " + new String(receivePacket.getData()));
             }catch(Exception e){
                 e.printStackTrace();
             }

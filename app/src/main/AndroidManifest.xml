@@ -19,10 +19,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="Online.Server.HostGame">
+        <activity android:name="online.server.HostGame">
         </activity>
 
-        <activity android:name="Online.Client.JoinGame">
+        <activity android:name="online.client.JoinGame">
         </activity>
 
     </application>

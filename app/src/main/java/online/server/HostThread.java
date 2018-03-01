@@ -1,16 +1,17 @@
-package Online.Server;
+package online.server;
 
 import android.os.Handler;
 import android.os.Message;
 
-import Online.GameThread;
+import online.GameThread;
+import online.Monitor;
 
 /**
  * Created by otto on 2018-02-21.
  */
 
 public class HostThread extends GameThread {
-    private final int PLAYER_ID = 0;
+//    private final int PLAYER_ID = 0;
     private Handler turnHandler;
     private Monitor m;
 
