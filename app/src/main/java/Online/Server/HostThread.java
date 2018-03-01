@@ -10,14 +10,13 @@ import Online.GameThread;
  */
 
 public class HostThread extends GameThread {
-    private int id;
+    private final int PLAYER_ID = 0;
     private Handler turnHandler;
     private Monitor m;
 
     public HostThread(Handler turnHandler, Monitor m) {
         this.turnHandler = turnHandler;
         this.m = m;
-        id = 0;
     }
 
     @Override

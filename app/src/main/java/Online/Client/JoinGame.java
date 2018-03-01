@@ -5,14 +5,13 @@ import android.os.Handler;
 import android.support.v7.widget.GridLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import Online.OnlineActivities;
 import se.lth.soc13dan.battleshipsedaf65.DragListener;
 import se.lth.soc13dan.battleshipsedaf65.R;
 
 
 public class JoinGame extends OnlineActivities {
+    private final int PLAYER_ID = 1;
     private ClientThread client;
 
     @Override
@@ -29,7 +28,7 @@ public class JoinGame extends OnlineActivities {
         GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
 
-//        ArrayList<Integer> board = setupPhase(mGrid);
+        setupPhase(mGrid, PLAYER_ID);
 
     }
 

@@ -7,19 +7,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import Online.OnlineActivities;
 import se.lth.soc13dan.battleshipsedaf65.DragListener;
 import se.lth.soc13dan.battleshipsedaf65.R;
-import se.lth.soc13dan.battleshipsedaf65.Square;
 
 
 public class HostGame extends OnlineActivities {
+    private final int PLAYER_ID = 0;
     private HostThread host;
     private ServerThread server;
     private GridLayout mGrid;
-    private ArrayList<Square> board;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,16 +36,15 @@ public class HostGame extends OnlineActivities {
         statusText.setText("Place your ships!");
         mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
-        board = setupPhase(mGrid);
+        setupPhase(mGrid, PLAYER_ID);
 
         Button shootButton = (Button) this.findViewById(R.id.angry_btn);
         shootButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateView(mGrid, board);
+                updateView(mGrid, OnlineActivities.hostBoard);
             }
         });
-
 
     }
 

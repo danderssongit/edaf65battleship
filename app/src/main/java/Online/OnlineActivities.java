@@ -21,7 +21,8 @@ public class OnlineActivities extends AppCompatActivity {
     public static final int NBR_ITEMS = 100;
     protected boolean yourTurn;
     private Square square;
-    private ArrayList<Square> board;
+    public static ArrayList<Square> hostBoard;
+    public static ArrayList<Square> clientBoard;
     private Monitor monitor;
 
 //    @Override
@@ -32,11 +33,13 @@ public class OnlineActivities extends AppCompatActivity {
 
     public OnlineActivities() {
         yourTurn = false;
+        hostBoard = new ArrayList<>();
+        clientBoard = new ArrayList<>();
 //        monitor = new Monitor();      // causes crash..?
     }
 
-    public ArrayList<Square> setupPhase(GridLayout mGrid) {
-        board = new ArrayList<>();
+    public void setupPhase(GridLayout mGrid, int playerID) {
+        ArrayList<Square> board = new ArrayList<>();
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
@@ -51,7 +54,7 @@ public class OnlineActivities extends AppCompatActivity {
                 square = new Square(i, false);
                 itemView.setTag(square);
             }
-            board.add(square);
+            whatBoard(playerID).add(square);
             mGrid.addView(itemView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -67,18 +70,23 @@ public class OnlineActivities extends AppCompatActivity {
                 }
             });
         }
-        return board;
+    }
+
+    public void shoot(int squareID) {
+        if (square.getCoord() == squareID) {
+            square.press();
+        }
     }
 
     public void checkForHit(GridLayout mGrid, int playerID, int squareID) {
-        for(Square s : Monitor.board.get(playerID)){
-            if ((s.getCoord() == squareID) && s.isShip()) {
-                s.hit(); //set status to hit
-            } else if ((s.getCoord() == squareID)){
-                s.press(); //set to miss instead
+        for(Square square : whatBoard(playerID)){
+            if ((square.getCoord() == squareID) && square.isShip()) {
+                square.hit(); //set status to hit
+            } else if ((square.getCoord() == squareID)){
+                square.press(); //set to miss instead
             }
         }
-        updateView(mGrid, board);
+        updateView(mGrid, whatBoard(playerID));
         monitor.changeTurn();
     }
 
@@ -98,6 +106,14 @@ public class OnlineActivities extends AppCompatActivity {
                 text.setText("");
             }
             mGrid.addView(itemView);
+        }
+    }
+
+    private ArrayList<Square> whatBoard(int playerID) {
+        if (playerID == 0) {
+            return hostBoard;
+        } else {
+            return clientBoard;
         }
     }
 }
