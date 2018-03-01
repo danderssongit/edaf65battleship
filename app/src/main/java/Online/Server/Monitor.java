@@ -42,6 +42,6 @@ public class Monitor extends OnlineActivities {
     }
 
     public void shoot(int squareID) {
-        checkForHit(turn, squareID);
+//        checkForHit(turn, squareID);
     }
 }
