@@ -13,13 +13,15 @@ import se.lth.soc13dan.battleshipsedaf65.Square;
 public class Monitor extends OnlineActivities {
 
     private int turn;
-    private int currentTurn;
     public static HashMap<Integer, ArrayList<Square>> board;
     private ArrayList<Square> myBoard, enemyBoard;
+    private int target;
+    private boolean myTurn;
 
 
     public Monitor() {
-        turn = 1;
+//        turn = 1;
+        myTurn = false;
     }
 
     public void addBoard(ArrayList<Square> positions, int id) {
@@ -27,20 +29,28 @@ public class Monitor extends OnlineActivities {
     }
 
 
-    public synchronized void waitTurn(int id, int squareID) {
-        while (!(id == turn)) {
+    public synchronized int waitTurn() {
+        while (!myTurn) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        shoot(squareID);
+        return target;
+
     }
 
-    public synchronized void changeTurn() {
+    public synchronized void changeTurn(int i) {
         turn = (turn + 1) % 2; // swaps between 1 and 0
+        target = i;
+        myTurn = !myTurn;
         notifyAll();
+    }
+
+
+    public boolean isMyTurn() {
+        return myTurn;
     }
 
     public void shoot(int squareID) {

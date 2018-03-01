@@ -48,10 +48,16 @@ public class ServerThread extends GameThread {
 
         while(!this.isInterrupted()){
             try{
-                byte[] data = new byte[1];
-                DatagramPacket dp = new DatagramPacket(data, data.length);
-                socket.receive(dp);
-                System.out.println(new String(dp.getData()));
+                int target = m.waitTurn();
+                byte[] data = {(byte) target};
+                DatagramPacket sendPacket = new DatagramPacket(data, data.length,  InetAddress.getByName(clientAddress), 8080);
+                socket.send(sendPacket);
+                System.out.println("Shooting square: " + target);
+
+                data = new byte[1];
+                DatagramPacket receivePacket = new DatagramPacket(data, data.length);
+                socket.receive(receivePacket);
+                System.out.println("Got shot on square: " + new String(receivePacket.getData()));
             }catch(Exception e){
                 e.printStackTrace();
             }
