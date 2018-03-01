@@ -12,6 +12,8 @@ import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
+import online.OnlineActivities;
+
 /**
  * Created by otto on 2018-02-26.
  */
@@ -60,13 +62,13 @@ public class ClientThread extends Thread {
             ds = new DatagramSocket(8080); //create a new socket where the client and server can communicate
             byte[] buffer = (ia.toString()).getBytes();
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(broadCastHost), 8080);
-            System.out.println("SENDING PACKET");
+            System.out.println("SENDING PACKET 1");
             ds.send(packet); //send the client ip to the multicast address (server)
             byte[] recvBuf = new byte[1024];
             DatagramPacket recv = new DatagramPacket(recvBuf, recvBuf.length);
-            System.out.println("WAITING FOR PACKET");
+            System.out.println("WAITING FOR PACKET 1");
             ds.receive(recv);
-            System.out.println("PACKET RECEIVED");
+            System.out.println("PACKET RECEIVED 1");
             destHost = recv.getAddress(); //save the server address
             System.out.println("HELLO: " + destHost.toString());
 
@@ -77,8 +79,21 @@ public class ClientThread extends Thread {
         }
 
         while (!this.interrupted()) {
-            Message msg = Message.obtain();
+//            Message msg = Message.obtain();
             try {
+//                byte[] buf = new byte[1024];
+//                DatagramPacket receivePacket = new DatagramPacket(buf, buf.length);
+//                System.out.println("WAITING FOR PACKET 2");
+//                ds.receive(receivePacket);
+//                System.out.println("PACKET RECEIVED 2");
+//                msg.what = (receivePacket.getData()[0]);
+//                turnHandler.sendMessage(msg);
+
+//                int move = OnlineActivities.getData();
+                byte[] send = {(byte) 42};
+                DatagramPacket sendPacket = new DatagramPacket(send,send.length, destHost, 8080);
+                ds.send(sendPacket);
+                System.out.println("SENDING PACKET 2");
             } catch (Exception e) {
                 System.out.println("IO error " + e);
 

@@ -45,9 +45,13 @@ public class ServerThread extends GameThread {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         while(!this.isInterrupted()){
             try{
-                //send stuff
+                byte[] data = new byte[1];
+                DatagramPacket dp = new DatagramPacket(data, data.length);
+                socket.receive(dp);
+                System.out.println(new String(dp.getData()));
             }catch(Exception e){
                 e.printStackTrace();
             }
