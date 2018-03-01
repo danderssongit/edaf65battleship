@@ -29,7 +29,7 @@ public class JoinGame extends OnlineActivities {
         GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
 
-        ArrayList<Integer> board = setupPhase(mGrid);
+//        ArrayList<Integer> board = setupPhase(mGrid);
 
     }
 
