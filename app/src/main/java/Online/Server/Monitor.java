@@ -1,12 +1,14 @@
 package Online.Server;
 
+import java.io.Serializable;
+
 import Online.OnlineActivities;
 
 /**
  * Created by otto on 2018-02-18.
  */
 
-public class Monitor extends OnlineActivities {
+public class Monitor extends OnlineActivities implements Serializable {
     private int turn;
     private int currentTurn;
 
