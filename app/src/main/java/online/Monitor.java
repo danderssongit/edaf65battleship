@@ -1,4 +1,4 @@
-package online.server;
+package online;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,21 +13,14 @@ import se.lth.soc13dan.battleshipsedaf65.Square;
 public class Monitor extends OnlineActivities {
 
     private int turn;
-    public static HashMap<Integer, ArrayList<Square>> board;
-    private ArrayList<Square> myBoard, enemyBoard;
     private int target;
     private boolean myTurn;
 
 
-    public Monitor() {
+    public Monitor(boolean myTurn) {
 //        turn = 1;
-        myTurn = false;
+        this.myTurn = myTurn;
     }
-
-    public void addBoard(ArrayList<Square> positions, int id) {
-        board.put(id, positions);
-    }
-
 
     public synchronized int waitTurn() {
         while (!myTurn) {

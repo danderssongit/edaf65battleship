@@ -1,8 +1,6 @@
 package online.client;
 
 import android.os.Handler;
-import android.os.Message;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -12,15 +10,17 @@ import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
 
-import online.OnlineActivities;
+import online.Monitor;
+
 
 /**
  * Created by otto on 2018-02-26.
  */
 
 public class ClientThread extends Thread {
-    private int id;
-    private Handler turnHandler;
+//    private int id;
+//    private Handler turnHandler;
+    private Monitor monitor;
     private InetAddress ia;
     private DatagramSocket ds;
     private String host;
@@ -28,9 +28,10 @@ public class ClientThread extends Thread {
     private String broadCastHost = "224.0.50.50";
 
 
-    public ClientThread(Handler turnHandler) {
-        this.turnHandler = turnHandler;
-        id = 1;
+    public ClientThread(Monitor monitor) {
+//        this.turnHandler = turnHandler;
+//        id = 1;
+          this.monitor = monitor;
         boolean done = false;
         try {
             Enumeration e = NetworkInterface.getNetworkInterfaces(); //returns a list with all interfaces

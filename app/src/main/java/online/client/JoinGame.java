@@ -21,14 +21,14 @@ public class JoinGame extends OnlineActivities {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        final Handler turnHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                System.out.println(msg.what);
-            }
-        };
+//        final Handler turnHandler = new Handler() {
+//            @Override
+//            public void handleMessage(Message msg) {
+//                System.out.println(msg.what);
+//            }
+//        };
 
-        client = new ClientThread(turnHandler);
+        client = new ClientThread();
         client.start();
 
         TextView statusText = (TextView) findViewById(R.id.status);
@@ -36,7 +36,7 @@ public class JoinGame extends OnlineActivities {
         GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
 
-//        ArrayList<Integer> board = setupPhase(mGrid);
+        setupPhase(mGrid, true);
 
     }
 

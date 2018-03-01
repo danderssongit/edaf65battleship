@@ -5,11 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v7.widget.GridLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import online.server.Monitor;
 import se.lth.soc13dan.battleshipsedaf65.LongPressListener;
 import se.lth.soc13dan.battleshipsedaf65.R;
 import se.lth.soc13dan.battleshipsedaf65.Square;
@@ -33,10 +31,10 @@ public class OnlineActivities extends AppCompatActivity {
 
     public OnlineActivities() {
         yourTurn = false;
-//        monitor = new Monitor();      // causes crash..?
     }
 
-    public ArrayList<Square> setupPhase(GridLayout mGrid) {
+    public ArrayList<Square> setupPhase(GridLayout mGrid, Boolean myTurn) {
+        monitor = new Monitor(myTurn);
         board = new ArrayList<>();
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
@@ -74,16 +72,16 @@ public class OnlineActivities extends AppCompatActivity {
         return board;
     }
 
-    public void checkForHit(GridLayout mGrid, int playerID, int squareID) {
-        for(Square s : Monitor.board.get(playerID)){
-            if ((s.getCoord() == squareID) && s.isShip()) {
-                s.hit(); //set status to hit
-            } else if ((s.getCoord() == squareID)){
-                s.press(); //set to miss instead
-            }
-        }
-        updateView(mGrid, board);
-    }
+//    public void checkForHit(GridLayout mGrid, int playerID, int squareID) {
+//        for(Square s : Monitor.board.get(playerID)){
+//            if ((s.getCoord() == squareID) && s.isShip()) {
+//                s.hit(); //set status to hit
+//            } else if ((s.getCoord() == squareID)){
+//                s.press(); //set to miss instead
+//            }
+//        }
+//        updateView(mGrid, board);
+//    }
 
     public void updateView(GridLayout mGrid, ArrayList<Square> board) {
         mGrid.removeAllViews();

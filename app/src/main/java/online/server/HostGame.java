@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
+import online.Monitor;
 import online.OnlineActivities;
 import se.lth.soc13dan.battleshipsedaf65.DragListener;
 import se.lth.soc13dan.battleshipsedaf65.R;
@@ -28,21 +29,19 @@ public class HostGame extends OnlineActivities {
         setContentView(R.layout.activity_game);
 
         Monitor monitor = new Monitor();
-        final Handler turnHandler = new Handler();
+//        final Handler turnHandler = new Handler();
 
-        host = new HostThread(turnHandler, monitor);
+//        host = new HostThread(turnHandler, monitor);
         server = new ServerThread(monitor);
         host.start();
         server.start();
-
-
 
         TextView statusText = (TextView) findViewById(R.id.status);
         statusText.setText("Place your ships!");
 
         mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
-        board = setupPhase(mGrid);
+        board = setupPhase(mGrid, false);
 
         Button shootButton = (Button) this.findViewById(R.id.angry_btn);
         shootButton.setOnClickListener(new View.OnClickListener() {
