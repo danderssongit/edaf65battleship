@@ -35,9 +35,11 @@ public class OnlineActivities extends AppCompatActivity {
         yourTurn = false;
         hostBoard = new ArrayList<>();
         clientBoard = new ArrayList<>();
+        positions = new ArrayList<>();
     }
 
     public void setupPhase(GridLayout mGrid, int playerID, Boolean myTurn) {
+
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
@@ -47,20 +49,20 @@ public class OnlineActivities extends AppCompatActivity {
             itemView.setTag(square);
             whatBoard(playerID).add(square);
 
-            positions = new ArrayList<>();
             itemView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     square = (Square) v.getTag();
-                    if (!square.isPressed()) {
+                    Integer pos = new Integer(square.getCoord());
+                    if (!positions.contains(pos)) {
                         text.setText("S");
-                        square.press();
-                        square.hasShip();
+                        square.shipToggle();
                         positions.add(square.getCoord());
+                        System.out.println(positions);
                     } else {
                         text.setText("");
-                        square.press();
-                        square.noShip();
-                        positions.remove(new Integer(square.getCoord()));
+                        square.shipToggle();
+                        positions.remove(pos);
+                        System.out.println(positions);
                     }
                 }
             });
@@ -105,18 +107,27 @@ public class OnlineActivities extends AppCompatActivity {
 //        }
 //    }
 
+
     public void shoot(int squareID) {
         if (square.getCoord() == squareID) {
-            square.press();
+            square.pressToggle();
         }
     }
+
+    public void addPositions(){
+        monitor.addPositions(positions);
+    }
+
+//    public ArrayList<Integer> getSetupPositions(){
+//        return positions;
+//    }
 
     public void checkForHit(GridLayout mGrid, int playerID, int squareID) {
         for (Square square : whatBoard(playerID)) {
             if ((square.getCoord() == squareID) && square.isShip()) {
                 square.hit(); //set status to hit
             } else if ((square.getCoord() == squareID)) {
-                square.press(); //set to miss instead
+                square.pressToggle(); //set to miss instead
             }
         }
         updateView(mGrid, whatBoard(playerID));

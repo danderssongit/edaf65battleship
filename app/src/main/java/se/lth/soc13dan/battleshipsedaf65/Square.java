@@ -21,16 +21,12 @@ public class Square {
         return id;
     }
 
-    public void press() {
+    public void pressToggle() {
         press = !press;
     }
 
-    public void hasShip(){
-        isShip = true;
-    }
-
-    public void noShip() {
-        isShip = false;
+    public void shipToggle(){
+        isShip = !isShip;
     }
 
     public boolean isPressed() {

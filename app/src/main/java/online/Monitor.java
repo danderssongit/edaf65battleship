@@ -1,6 +1,7 @@
 package online;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by otto on 2018-02-18.
@@ -10,11 +11,13 @@ public class Monitor extends OnlineActivities implements Serializable {
     private int turn;
     private int target;
     private boolean myTurn;
-    private int[] positions;
+    private ArrayList<Integer> positions;
+    public boolean setupPhase;
 
     public Monitor(boolean myTurn) {
 //        turn = 1;
         this.myTurn = myTurn;
+        setupPhase = true;
     }
 
     public synchronized int waitTurn() {
@@ -39,11 +42,19 @@ public class Monitor extends OnlineActivities implements Serializable {
         return myTurn;
     }
 
-    public void addPositions(int[] positions){
+    public void addPositions(ArrayList<Integer> positions){
         this.positions = positions;
     }
 
-    public int[] getOponentPositions() {
-        return positions;
+    public String getSetupPositions() {
+        String s = "";
+        for(Integer pos : positions){
+            s += pos.toString() + ":";
+        }
+
+        System.out.println(s);
+        return s;
+
+
     }
 }

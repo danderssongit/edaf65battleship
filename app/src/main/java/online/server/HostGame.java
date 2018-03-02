@@ -18,6 +18,7 @@ public class HostGame extends OnlineActivities {
     private HostThread host;
     private ServerThread server;
     private GridLayout mGrid;
+    private Monitor monitor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +27,8 @@ public class HostGame extends OnlineActivities {
 //        final Handler turnHandler = new Handler();
 //        host = new HostThread(turnHandler, monitor);
 //        host.start();
-
-        server = new ServerThread((Monitor) getIntent().getSerializableExtra("monitor"));
+        monitor = (Monitor) getIntent().getSerializableExtra("monitor");
+        server = new ServerThread(monitor);
         server.start();
 
         TextView statusText = (TextView) findViewById(R.id.status);
@@ -41,7 +42,9 @@ public class HostGame extends OnlineActivities {
         shootButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateView(mGrid, OnlineActivities.hostBoard);
+//                updateView(mGrid, OnlineActivities.hostBoard);
+                addPositions();
+                monitor.setupPhase = false;
             }
         });
 

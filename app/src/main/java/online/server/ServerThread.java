@@ -1,5 +1,6 @@
 package online.server;
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -18,7 +19,7 @@ public class ServerThread extends GameThread {
     private MulticastSocket ms;
     private InetAddress ia;
     private DatagramSocket socket;
-    private String clientAddress;
+    private InetAddress clientAddress;
 
     public ServerThread(Monitor m){
             this.m = m;
@@ -36,16 +37,32 @@ public class ServerThread extends GameThread {
             System.out.println("WAITING FOR PACKET");
             ms.receive(init);
             System.out.println("PACKET RECEIVED");
-            clientAddress = init.getAddress().getHostAddress(); //extracts the ip address from the client
+            clientAddress = init.getAddress(); //extracts the ip address from the client
             System.out.println("Client @ " + clientAddress.toString());
-            start = "hello".getBytes();
             ms.close();
+
             socket = new DatagramSocket(8080); //creates a socket where the client and server can communicate
-            init = new DatagramPacket(start, start.length, InetAddress.getByName(clientAddress), 8080); //sends the package to the correct address and socket
-            socket.send(init);
+//            start = "hello".getBytes();
+//            init = new DatagramPacket(start, start.length, InetAddress.getByName(clientAddress), 8080); //sends the package to the correct address and socket
+//            socket.send(init);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        while(m.setupPhase){
+            }
+
+        System.out.println("SETUP PHASE END");
+
+        try {
+            byte[] data = m.getSetupPositions().getBytes();
+            DatagramPacket myPositions = new DatagramPacket(data, data.length, clientAddress, 8080);
+            socket.send(myPositions);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
 
         while(!this.isInterrupted()){
             try{
