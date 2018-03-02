@@ -32,7 +32,7 @@ public class ServerThread extends GameThread {
             ia = InetAddress.getByName("224.0.50.50");
             ms.joinGroup(ia); //creates a socket at which clients can connect
 
-            byte[] start = new byte[1024];
+            byte[] start = new byte[64];
             DatagramPacket init = new DatagramPacket(start, start.length);
             System.out.println("WAITING FOR PACKET");
             ms.receive(init);
@@ -42,7 +42,7 @@ public class ServerThread extends GameThread {
             ms.close();
 
             socket = new DatagramSocket(8080); //creates a socket where the client and server can communicate
-            start = "hello".getBytes();
+            start = "0".getBytes();
             init = new DatagramPacket(start, start.length, InetAddress.getByName(clientAddress), 8080); //sends the package to the correct address and socket
             socket.send(init);
         } catch (Exception e) {

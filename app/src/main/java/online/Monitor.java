@@ -1,6 +1,7 @@
 package online;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -11,13 +12,16 @@ public class Monitor extends OnlineActivities implements Serializable {
     private int turn;
     private int target;
     private boolean myTurn;
-    private ArrayList<Integer> positions;
+    private ArrayList<Integer> myPositions, enemyPositions;
+
+
     public boolean setupPhase;
 
     public Monitor(boolean myTurn) {
 //        turn = 1;
         this.myTurn = myTurn;
         setupPhase = true;
+
     }
 
     public synchronized int waitTurn() {
@@ -43,18 +47,25 @@ public class Monitor extends OnlineActivities implements Serializable {
     }
 
     public void addPositions(ArrayList<Integer> positions){
-        this.positions = positions;
+        this.myPositions = positions;
     }
 
     public String getSetupPositions() {
         String s = "";
-        for(Integer pos : positions){
+        for(Integer pos : myPositions){
             s += pos.toString() + ":";
         }
-
         System.out.println(s);
         return s;
+    }
 
+    public void addEnemyPositions(String positions){
+        enemyPositions = new ArrayList<>();
+        String[] posArray = positions.split(":");
+        for(String pos : posArray) {
+                enemyPositions.add(Integer.parseInt(pos));
+        }
+        System.out.println("ENEMY HAS SHIPS ON: " + enemyPositions);
 
     }
 }

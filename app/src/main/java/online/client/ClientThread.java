@@ -65,14 +65,17 @@ public class ClientThread extends Thread {
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(broadCastHost), 8080);
             System.out.println("SENDING PACKET 1");
             socket.send(packet); //send the client ip to the multicast address (server)
-            byte[] recvBuf = new byte[1024];
-            DatagramPacket recv = new DatagramPacket(recvBuf, recvBuf.length);
+            byte[] data = new byte[64];
+            DatagramPacket receivePacket = new DatagramPacket(data, data.length);
             System.out.println("WAITING FOR PACKET 1");
-            socket.receive(recv);
+            socket.receive(receivePacket);
             System.out.println("PACKET RECEIVED 1");
-            destHost = recv.getAddress(); //save the server address
-            System.out.println("HELLO: " + destHost.toString());
+            destHost = receivePacket.getAddress(); //save the server address
+            System.out.println("HELLO: " + destHost.toString() + "! Waiting for setup.");
 
+            socket.receive(receivePacket);
+            String positions = new String(receivePacket.getData()).substring(0,8);
+            monitor.addEnemyPositions(positions);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -91,11 +94,7 @@ public class ClientThread extends Thread {
 //                socket.send(sendPacket);
 //                System.out.println("Shooting square: " + target);
 
-                System.out.println("WAITING FOR SETUP PHASE");
-                byte[] data = new byte[150];
-                DatagramPacket receivePacket = new DatagramPacket(data, data.length);
-                socket.receive(receivePacket);
-                System.out.println("ENEMY HAS SHIPS ON: " + new String(receivePacket.getData()));
+
             } catch (Exception e) {
                 System.out.println("IO error " + e);
 

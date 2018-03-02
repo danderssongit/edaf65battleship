@@ -152,6 +152,12 @@ public class OnlineActivities extends AppCompatActivity {
         }
     }
 
+    public void fillEnemyBoard(){
+//        for
+
+
+    }
+
     private ArrayList<Square> whatBoard(int playerID) {
         if (playerID == 0) {
             return hostBoard;
