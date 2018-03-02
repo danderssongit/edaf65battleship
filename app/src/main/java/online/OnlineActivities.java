@@ -4,7 +4,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v7.widget.GridLayout;
+import android.widget.Button;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -18,12 +21,13 @@ import se.lth.soc13dan.battleshipsedaf65.Square;
 
 public class OnlineActivities extends AppCompatActivity {
     public static final int NBR_ITEMS = 100;
+    public static final int NBR_SHIPS_TO_PLACE = 5;
     protected boolean yourTurn;
     private Square square;
     public static ArrayList<Square> hostBoard;
     public static ArrayList<Square> clientBoard;
-
     private ArrayList<Integer> positions;
+    private int placedShips;
 
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +42,8 @@ public class OnlineActivities extends AppCompatActivity {
         positions = new ArrayList<>();
     }
 
-    public void setupPhase(GridLayout mGrid, int playerID, Boolean myTurn) {
-
+    public void setupPhase(GridLayout mGrid, final TextView shipsToPlaceText, final Button readyButton, int playerID, Boolean myTurn) {
+        placedShips = 0;
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
@@ -53,21 +57,44 @@ public class OnlineActivities extends AppCompatActivity {
                 public void onClick(View v) {
                     square = (Square) v.getTag();
                     Integer pos = new Integer(square.getCoord());
-                    if (!positions.contains(pos)) {
-                        text.setText("S");
-                        square.shipToggle();
-                        positions.add(square.getCoord());
-                        System.out.println(positions);
-                    } else {
+                    if (positions.size() < NBR_SHIPS_TO_PLACE) {
+                        if (!positions.contains(pos)) {
+                            text.setText("S");
+                            square.shipToggle();
+                            positions.add(square.getCoord());
+                            placedShips++;
+                            shipsToPlaceText.setText("Ships left to place: " + (NBR_SHIPS_TO_PLACE - placedShips));
+                            System.out.println(positions + ", ships placed: " + Integer.toString(placedShips) + ", positions size: " + positions.size());
+                            if (placedShips == NBR_SHIPS_TO_PLACE) {
+                                readyButton.setEnabled(true);
+                            }
+                        } else {
+                            text.setText("");
+                            square.shipToggle();
+                            positions.remove(pos);
+                            placedShips--;
+                            shipsToPlaceText.setText("Ships left to place: " + (NBR_SHIPS_TO_PLACE - placedShips));
+                            System.out.println(positions + ", ships placed: " + Integer.toString(placedShips) + ", positions size: " + positions.size());
+                            if (placedShips < NBR_SHIPS_TO_PLACE) {
+                                readyButton.setEnabled(false);
+                            }
+                        }
+                    } else if (square.isShip()){
                         text.setText("");
                         square.shipToggle();
                         positions.remove(pos);
-                        System.out.println(positions);
+                        placedShips--;
+                        shipsToPlaceText.setText("Ships left to place: " + (NBR_SHIPS_TO_PLACE - placedShips));
+                        System.out.println(positions + ", ships placed: " + Integer.toString(placedShips) + ", positions size: " + positions.size());
+                        if (placedShips < NBR_SHIPS_TO_PLACE) {
+                            readyButton.setEnabled(false);
+                        }
                     }
                 }
             });
             mGrid.addView(itemView);
         }
+
     }
 
 //    public void setupPhase(GridLayout mGrid, int playerID, Boolean myTurn) {

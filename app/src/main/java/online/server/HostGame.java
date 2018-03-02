@@ -33,15 +33,16 @@ public class HostGame extends OnlineActivities {
         server.start();
 
         TextView statusText = (TextView) findViewById(R.id.status);
-        statusText.setText("Place your ships!");
+        statusText.setText("Click squares to position your ships!");
+        TextView shipsToPlaceText = (TextView) findViewById(R.id.shipsToPlace);
+        shipsToPlaceText.setText("Ships left to place: " + OnlineActivities.NBR_SHIPS_TO_PLACE);
 
         mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
 
-        setupPhase(mGrid, PLAYER_ID, false);
-
-        Button shootButton = (Button) this.findViewById(R.id.angry_btn);
-        shootButton.setOnClickListener(new View.OnClickListener() {
+        Button readyButton = (Button) this.findViewById(R.id.angry_btn);
+        readyButton.setEnabled(false);
+        readyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                updateView(mGrid, OnlineActivities.hostBoard);
@@ -50,6 +51,7 @@ public class HostGame extends OnlineActivities {
             }
         });
 
+        setupPhase(mGrid, shipsToPlaceText, readyButton, PLAYER_ID, false);
     }
 
     @Override
@@ -58,5 +60,10 @@ public class HostGame extends OnlineActivities {
         server.interrupt();
         server.killSockets();
         super.finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }
