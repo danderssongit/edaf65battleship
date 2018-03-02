@@ -27,14 +27,15 @@ public class HostGame extends OnlineActivities {
 //        final Handler turnHandler = new Handler();
 //        host = new HostThread(turnHandler, monitor);
 //        host.start();
+
         monitor = (Monitor) getIntent().getSerializableExtra("monitor");
         server = new ServerThread(monitor);
         server.start();
 
         TextView statusText = (TextView) findViewById(R.id.status);
-        statusText.setText("Place your ships!");
+        statusText.setText("Click squares to position your ships!");
         TextView shipsToPlaceText = (TextView) findViewById(R.id.shipsToPlace);
-        shipsToPlaceText.setText("Ships left to place: 3");
+        shipsToPlaceText.setText("Ships left to place: " + OnlineActivities.NBR_SHIPS_TO_PLACE);
 
         mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
@@ -45,7 +46,7 @@ public class HostGame extends OnlineActivities {
             @Override
             public void onClick(View view) {
 //                updateView(mGrid, OnlineActivities.hostBoard);
-                addPositions();
+                monitor.addPositions(getPositions());
                 monitor.setupPhase = false;
             }
         });
@@ -59,5 +60,10 @@ public class HostGame extends OnlineActivities {
         server.interrupt();
         server.killSockets();
         super.finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

@@ -35,9 +35,9 @@ public class JoinGame extends OnlineActivities {
         client.start();
 
         TextView statusText = (TextView) findViewById(R.id.status);
-        statusText.setText("Place your ships!");
+        statusText.setText("Click squares to position your ships!");
         TextView shipsToPlaceText = (TextView) findViewById(R.id.shipsToPlace);
-        shipsToPlaceText.setText("Ships left to place: 3");
+        shipsToPlaceText.setText("Ships left to place: " + OnlineActivities.NBR_SHIPS_TO_PLACE);
         GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
 
@@ -47,7 +47,7 @@ public class JoinGame extends OnlineActivities {
             @Override
             public void onClick(View view) {
 //                updateView(mGrid, OnlineActivities.hostBoard);
-                addPositions();
+                monitor.addPositions(getPositions());
                 monitor.setupPhase = false;
             }
         });

@@ -21,11 +21,11 @@ import se.lth.soc13dan.battleshipsedaf65.Square;
 
 public class OnlineActivities extends AppCompatActivity {
     public static final int NBR_ITEMS = 100;
+    public static final int NBR_SHIPS_TO_PLACE = 5;
     protected boolean yourTurn;
     private Square square;
     public static ArrayList<Square> hostBoard;
     public static ArrayList<Square> clientBoard;
-    private Monitor monitor;
     private ArrayList<Integer> positions;
     private int placedShips;
 
@@ -42,7 +42,7 @@ public class OnlineActivities extends AppCompatActivity {
         positions = new ArrayList<>();
     }
 
-    public void setupPhase(GridLayout mGrid, final TextView nbrShipsToPlace, final Button readyButton, int playerID, Boolean myTurn) {
+    public void setupPhase(GridLayout mGrid, final TextView shipsToPlaceText, final Button readyButton, int playerID, Boolean myTurn) {
         placedShips = 0;
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
@@ -57,15 +57,15 @@ public class OnlineActivities extends AppCompatActivity {
                 public void onClick(View v) {
                     square = (Square) v.getTag();
                     Integer pos = new Integer(square.getCoord());
-                    if (positions.size() < 3) {
+                    if (positions.size() < NBR_SHIPS_TO_PLACE) {
                         if (!positions.contains(pos)) {
                             text.setText("S");
                             square.shipToggle();
                             positions.add(square.getCoord());
                             placedShips++;
-                            nbrShipsToPlace.setText("Ships left to place: " + (3 - placedShips));
+                            shipsToPlaceText.setText("Ships left to place: " + (NBR_SHIPS_TO_PLACE - placedShips));
                             System.out.println(positions + ", ships placed: " + Integer.toString(placedShips) + ", positions size: " + positions.size());
-                            if (placedShips == 3) {
+                            if (placedShips == NBR_SHIPS_TO_PLACE) {
                                 readyButton.setEnabled(true);
                             }
                         } else {
@@ -73,9 +73,9 @@ public class OnlineActivities extends AppCompatActivity {
                             square.shipToggle();
                             positions.remove(pos);
                             placedShips--;
-                            nbrShipsToPlace.setText("Ships left to place: " + (3 - placedShips));
+                            shipsToPlaceText.setText("Ships left to place: " + (NBR_SHIPS_TO_PLACE - placedShips));
                             System.out.println(positions + ", ships placed: " + Integer.toString(placedShips) + ", positions size: " + positions.size());
-                            if (placedShips < 3) {
+                            if (placedShips < NBR_SHIPS_TO_PLACE) {
                                 readyButton.setEnabled(false);
                             }
                         }
@@ -84,9 +84,9 @@ public class OnlineActivities extends AppCompatActivity {
                         square.shipToggle();
                         positions.remove(pos);
                         placedShips--;
-                        nbrShipsToPlace.setText("Ships left to place: " + (3 - placedShips));
+                        shipsToPlaceText.setText("Ships left to place: " + (NBR_SHIPS_TO_PLACE - placedShips));
                         System.out.println(positions + ", ships placed: " + Integer.toString(placedShips) + ", positions size: " + positions.size());
-                        if (placedShips < 3) {
+                        if (placedShips < NBR_SHIPS_TO_PLACE) {
                             readyButton.setEnabled(false);
                         }
                     }
@@ -141,8 +141,8 @@ public class OnlineActivities extends AppCompatActivity {
         }
     }
 
-    public void addPositions() {
-        monitor.addPositions(positions);
+    public ArrayList<Integer> getPositions(){
+        return positions;
     }
 
 //    public ArrayList<Integer> getSetupPositions(){
