@@ -55,6 +55,7 @@ public class Monitor extends OnlineActivities implements Serializable {
         for(Integer pos : myPositions){
             s += pos.toString() + ":";
         }
+        s += "*";
         System.out.println(s);
         return s;
     }

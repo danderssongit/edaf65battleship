@@ -75,6 +75,9 @@ public class ClientThread extends Thread {
 
             socket.receive(receivePacket);
             String positions = new String(receivePacket.getData());
+            System.out.println(positions);
+            positions = positions.substring(0, positions.indexOf("*"));
+            System.out.println(positions);
             monitor.addEnemyPositions(positions);
         } catch (UnknownHostException e) {
             e.printStackTrace();
