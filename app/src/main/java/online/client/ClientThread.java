@@ -74,7 +74,7 @@ public class ClientThread extends Thread {
             System.out.println("HELLO: " + destHost.toString() + "! Waiting for setup.");
 
             socket.receive(receivePacket);
-            String positions = new String(receivePacket.getData()).substring(0,8);
+            String positions = new String(receivePacket.getData());
             monitor.addEnemyPositions(positions);
         } catch (UnknownHostException e) {
             e.printStackTrace();
