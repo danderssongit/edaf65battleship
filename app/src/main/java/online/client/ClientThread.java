@@ -88,6 +88,7 @@ public class ClientThread extends Thread {
                 socket.send(sendPacket);
                 System.out.println("Shooting square: " + target);
 
+
 //                data = new byte[1];
 //                DatagramPacket receivePacket = new DatagramPacket(data, data.length);
 //                socket.receive(receivePacket);

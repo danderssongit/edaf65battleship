@@ -8,9 +8,9 @@ import java.io.Serializable;
 
 public class Monitor extends OnlineActivities implements Serializable {
     private int turn;
-    private int currentTurn;
     private int target;
     private boolean myTurn;
+    private int[] positions;
 
     public Monitor(boolean myTurn) {
 //        turn = 1;
@@ -37,5 +37,13 @@ public class Monitor extends OnlineActivities implements Serializable {
 
     public boolean isMyTurn() {
         return myTurn;
+    }
+
+    public void addPositions(int[] positions){
+        this.positions = positions;
+    }
+
+    public int[] getOponentPositions() {
+        return positions;
     }
 }

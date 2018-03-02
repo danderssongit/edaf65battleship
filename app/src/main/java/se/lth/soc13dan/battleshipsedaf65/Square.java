@@ -14,7 +14,7 @@ public class Square {
         this.id = id;
         press = false;
         this.isShip = isShip;
-        this.isHit = isHit();
+        this.isHit = false;
     }
 
     public int getCoord(){
