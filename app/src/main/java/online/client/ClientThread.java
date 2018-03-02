@@ -81,20 +81,21 @@ public class ClientThread extends Thread {
 
 
 
+
         while (!this.interrupted()) {
 //            Message msg = Message.obtain();
             try {
-                int target = monitor.waitTurn();
-                byte[] data = {(byte) target};
-                DatagramPacket sendPacket = new DatagramPacket(data, data.length, destHost, 8080);
-                socket.send(sendPacket);
-                System.out.println("Shooting square: " + target);
+//                int target = monitor.waitTurn();
+//                byte[] data = {(byte) target};
+//                DatagramPacket sendPacket = new DatagramPacket(data, data.length, destHost, 8080);
+//                socket.send(sendPacket);
+//                System.out.println("Shooting square: " + target);
 
-
-//                data = new byte[1];
-//                DatagramPacket receivePacket = new DatagramPacket(data, data.length);
-//                socket.receive(receivePacket);
-//                System.out.println("Got shot on square: " + new String(receivePacket.getData()));
+                System.out.println("WAITING FOR SETUP PHASE");
+                byte[] data = new byte[150];
+                DatagramPacket receivePacket = new DatagramPacket(data, data.length);
+                socket.receive(receivePacket);
+                System.out.println("ENEMY HAS SHIPS ON: " + new String(receivePacket.getData()));
             } catch (Exception e) {
                 System.out.println("IO error " + e);
 

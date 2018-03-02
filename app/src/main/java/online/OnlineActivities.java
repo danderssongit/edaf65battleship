@@ -22,7 +22,7 @@ public class OnlineActivities extends AppCompatActivity {
     private Square square;
     public static ArrayList<Square> hostBoard;
     public static ArrayList<Square> clientBoard;
-    private Monitor monitor;
+
     private ArrayList<Integer> positions;
 
 //    @Override
@@ -114,8 +114,8 @@ public class OnlineActivities extends AppCompatActivity {
         }
     }
 
-    public void addPositions(){
-        monitor.addPositions(positions);
+    public ArrayList<Integer> getPositions(){
+        return positions;
     }
 
 //    public ArrayList<Integer> getSetupPositions(){

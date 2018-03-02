@@ -27,6 +27,7 @@ public class HostGame extends OnlineActivities {
 //        final Handler turnHandler = new Handler();
 //        host = new HostThread(turnHandler, monitor);
 //        host.start();
+
         monitor = (Monitor) getIntent().getSerializableExtra("monitor");
         server = new ServerThread(monitor);
         server.start();
@@ -36,6 +37,7 @@ public class HostGame extends OnlineActivities {
 
         mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
+
         setupPhase(mGrid, PLAYER_ID, false);
 
         Button shootButton = (Button) this.findViewById(R.id.angry_btn);
@@ -43,7 +45,7 @@ public class HostGame extends OnlineActivities {
             @Override
             public void onClick(View view) {
 //                updateView(mGrid, OnlineActivities.hostBoard);
-                addPositions();
+                monitor.addPositions(getPositions());
                 monitor.setupPhase = false;
             }
         });
