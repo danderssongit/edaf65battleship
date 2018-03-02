@@ -22,7 +22,15 @@ public class Square {
     }
 
     public void press() {
-        press = true;
+        press = !press;
+    }
+
+    public void hasShip(){
+        isShip = true;
+    }
+
+    public void noShip() {
+        isShip = false;
     }
 
     public boolean isPressed() {

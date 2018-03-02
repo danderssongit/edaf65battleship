@@ -79,6 +79,8 @@ public class ClientThread extends Thread {
             e.printStackTrace();
         }
 
+
+
         while (!this.interrupted()) {
 //            Message msg = Message.obtain();
             try {
