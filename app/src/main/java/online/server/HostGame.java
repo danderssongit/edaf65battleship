@@ -33,13 +33,15 @@ public class HostGame extends OnlineActivities {
 
         TextView statusText = (TextView) findViewById(R.id.status);
         statusText.setText("Place your ships!");
+        TextView shipsToPlaceText = (TextView) findViewById(R.id.shipsToPlace);
+        shipsToPlaceText.setText("Ships left to place: 3");
 
         mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
-        setupPhase(mGrid, PLAYER_ID, false);
 
-        Button shootButton = (Button) this.findViewById(R.id.angry_btn);
-        shootButton.setOnClickListener(new View.OnClickListener() {
+        Button readyButton = (Button) this.findViewById(R.id.angry_btn);
+        readyButton.setEnabled(false);
+        readyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                updateView(mGrid, OnlineActivities.hostBoard);
@@ -48,6 +50,7 @@ public class HostGame extends OnlineActivities {
             }
         });
 
+        setupPhase(mGrid, shipsToPlaceText, readyButton, PLAYER_ID, false);
     }
 
     @Override
