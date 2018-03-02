@@ -22,7 +22,7 @@ public class ClientThread extends Thread {
 //    private Handler turnHandler;
     private Monitor monitor;
     private InetAddress ia;
-    private DatagramSocket ds;
+    private DatagramSocket socket;
     private String host;
     private InetAddress destHost;
     private String broadCastHost = "224.0.50.50";
@@ -60,15 +60,15 @@ public class ClientThread extends Thread {
 
     public void run(){
         try {
-            ds = new DatagramSocket(8080); //create a new socket where the client and server can communicate
+            socket = new DatagramSocket(8080); //create a new socket where the client and server can communicate
             byte[] buffer = (ia.toString()).getBytes();
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(broadCastHost), 8080);
             System.out.println("SENDING PACKET 1");
-            ds.send(packet); //send the client ip to the multicast address (server)
+            socket.send(packet); //send the client ip to the multicast address (server)
             byte[] recvBuf = new byte[1024];
             DatagramPacket recv = new DatagramPacket(recvBuf, recvBuf.length);
             System.out.println("WAITING FOR PACKET 1");
-            ds.receive(recv);
+            socket.receive(recv);
             System.out.println("PACKET RECEIVED 1");
             destHost = recv.getAddress(); //save the server address
             System.out.println("HELLO: " + destHost.toString());
@@ -82,19 +82,16 @@ public class ClientThread extends Thread {
         while (!this.interrupted()) {
 //            Message msg = Message.obtain();
             try {
-//                byte[] buf = new byte[1024];
-//                DatagramPacket receivePacket = new DatagramPacket(buf, buf.length);
-//                System.out.println("WAITING FOR PACKET 2");
-//                ds.receive(receivePacket);
-//                System.out.println("PACKET RECEIVED 2");
-//                msg.what = (receivePacket.getData()[0]);
-//                turnHandler.sendMessage(msg);
+                int target = monitor.waitTurn();
+                byte[] data = {(byte) target};
+                DatagramPacket sendPacket = new DatagramPacket(data, data.length, destHost, 8080);
+                socket.send(sendPacket);
+                System.out.println("Shooting square: " + target);
 
-//                int move = OnlineActivities.getData();
-                byte[] send = {(byte) 42};
-                DatagramPacket sendPacket = new DatagramPacket(send,send.length, destHost, 8080);
-                ds.send(sendPacket);
-                System.out.println("SENDING PACKET 2");
+//                data = new byte[1];
+//                DatagramPacket receivePacket = new DatagramPacket(data, data.length);
+//                socket.receive(receivePacket);
+//                System.out.println("Got shot on square: " + new String(receivePacket.getData()));
             } catch (Exception e) {
                 System.out.println("IO error " + e);
 
@@ -105,9 +102,9 @@ public class ClientThread extends Thread {
     }
 
     public void killSockets() {
-        if (ds != null){
-            ds.disconnect();
-            ds.close();
+        if (socket != null){
+            socket.disconnect();
+            socket.close();
         }
     }
 }
