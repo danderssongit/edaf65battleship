@@ -29,6 +29,10 @@ public class Square {
         isShip = !isShip;
     }
 
+    public void putShip(){
+        isShip = true;
+    }
+
     public boolean isPressed() {
         return press;
     }

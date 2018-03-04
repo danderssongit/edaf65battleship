@@ -46,7 +46,7 @@ public class Monitor extends OnlineActivities implements Serializable {
         return myTurn;
     }
 
-    public void addPositions(ArrayList<Integer> positions){
+    public void addMyPositions(ArrayList<Integer> positions){
         this.myPositions = positions;
     }
 
@@ -62,11 +62,13 @@ public class Monitor extends OnlineActivities implements Serializable {
 
     public void addEnemyPositions(String positions){
         enemyPositions = new ArrayList<>();
+
         String[] posArray = positions.split(":");
         for(String pos : posArray) {
                 enemyPositions.add(Integer.parseInt(pos));
         }
         System.out.println("ENEMY HAS SHIPS ON: " + enemyPositions);
+        fillEnemyBoard(enemyPositions);
 
     }
 }

@@ -42,7 +42,7 @@ public class OnlineActivities extends AppCompatActivity {
         positions = new ArrayList<>();
     }
 
-    public void setupPhase(GridLayout mGrid, final TextView shipsToPlaceText, final Button readyButton, int playerID, Boolean myTurn) {
+    public void setupPhase(GridLayout mGrid, final Button readyButton, int playerID, Boolean myTurn) {
         placedShips = 0;
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
@@ -63,32 +63,26 @@ public class OnlineActivities extends AppCompatActivity {
                             square.shipToggle();
                             positions.add(square.getCoord());
                             placedShips++;
-                            shipsToPlaceText.setText("Ships left to place: " + (NBR_SHIPS_TO_PLACE - placedShips));
-                            System.out.println(positions + ", ships placed: " + Integer.toString(placedShips) + ", positions size: " + positions.size());
-                            if (placedShips == NBR_SHIPS_TO_PLACE) {
-                                readyButton.setEnabled(true);
-                            }
+
                         } else {
                             text.setText("");
                             square.shipToggle();
                             positions.remove(pos);
                             placedShips--;
-                            shipsToPlaceText.setText("Ships left to place: " + (NBR_SHIPS_TO_PLACE - placedShips));
-                            System.out.println(positions + ", ships placed: " + Integer.toString(placedShips) + ", positions size: " + positions.size());
-                            if (placedShips < NBR_SHIPS_TO_PLACE) {
-                                readyButton.setEnabled(false);
-                            }
                         }
                     } else if (square.isShip()){
                         text.setText("");
                         square.shipToggle();
                         positions.remove(pos);
                         placedShips--;
-                        shipsToPlaceText.setText("Ships left to place: " + (NBR_SHIPS_TO_PLACE - placedShips));
-                        System.out.println(positions + ", ships placed: " + Integer.toString(placedShips) + ", positions size: " + positions.size());
-                        if (placedShips < NBR_SHIPS_TO_PLACE) {
-                            readyButton.setEnabled(false);
-                        }
+                    }
+                    System.out.println(positions + ", ships placed: " + Integer.toString(placedShips) + ", positions size: " + positions.size());
+                    if (placedShips == NBR_SHIPS_TO_PLACE) {
+                        readyButton.setText("Start Game");
+                        readyButton.setEnabled(true);
+                    } else {
+                        readyButton.setText("Place " + (NBR_SHIPS_TO_PLACE  - placedShips) + " more");
+                        readyButton.setEnabled(false);
                     }
                 }
             });
@@ -179,10 +173,12 @@ public class OnlineActivities extends AppCompatActivity {
         }
     }
 
-    public void fillEnemyBoard(){
-//        for
-
-
+    public void fillEnemyBoard(ArrayList<Integer> positions){
+        for (Square square : whatBoard(1)){                 //TODO: Get enemy board
+            if(positions.contains(square.getCoord())){
+                square.putShip();
+            }
+        }
     }
 
     private ArrayList<Square> whatBoard(int playerID) {

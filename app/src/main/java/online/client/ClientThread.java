@@ -59,28 +59,42 @@ public class ClientThread extends Thread {
     }
 
     public void run(){
+        byte[] data = new byte[64];
+        DatagramPacket receivePacket = new DatagramPacket(data, data.length);
         try {
             socket = new DatagramSocket(8080); //create a new socket where the client and server can communicate
             byte[] buffer = (ia.toString()).getBytes();
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(broadCastHost), 8080);
             System.out.println("SENDING PACKET 1");
             socket.send(packet); //send the client ip to the multicast address (server)
-            byte[] data = new byte[64];
-            DatagramPacket receivePacket = new DatagramPacket(data, data.length);
             System.out.println("WAITING FOR PACKET 1");
             socket.receive(receivePacket);
             System.out.println("PACKET RECEIVED 1");
             destHost = receivePacket.getAddress(); //save the server address
             System.out.println("HELLO: " + destHost.toString() + "! Waiting for setup.");
 
-            socket.receive(receivePacket);
-            String positions = new String(receivePacket.getData());
-            System.out.println(positions);
-            positions = positions.substring(0, positions.indexOf("*"));
-            System.out.println(positions);
-            monitor.addEnemyPositions(positions);
+
+
         } catch (UnknownHostException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        while(monitor.setupPhase){
+        }
+
+        try {
+//            Sending my ship positions
+            data = monitor.getSetupPositions().getBytes();
+            DatagramPacket myPositions = new DatagramPacket(data, data.length, destHost, 8080);
+            socket.send(myPositions);
+
+            // Waiting for opponent setup phase
+            socket.receive(receivePacket);
+            String positions = new String(receivePacket.getData());
+            positions = positions.substring(0, positions.indexOf("*"));
+            monitor.addEnemyPositions(positions);
         } catch (IOException e) {
             e.printStackTrace();
         }
