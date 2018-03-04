@@ -23,23 +23,16 @@ public class JoinGame extends OnlineActivities {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-//        final Handler turnHandler = new Handler() {
-//            @Override
-//            public void handleMessage(Message msg) {
-//                System.out.println(msg.what);
-//            }
-//        };
-
         monitor = (Monitor) getIntent().getSerializableExtra("monitor");
         client = new ClientThread(monitor);
         client.start();
 
         TextView statusText = (TextView) findViewById(R.id.status);
         statusText.setText("Click squares to position your ships!");
-        GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
+        final GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
 
-        Button readyButton = (Button) this.findViewById(R.id.angry_btn);
+        final Button readyButton = (Button) this.findViewById(R.id.angry_btn);
         readyButton.setEnabled(false);
         readyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +40,8 @@ public class JoinGame extends OnlineActivities {
 //                updateView(mGrid, OnlineActivities.hostBoard);
                 monitor.addMyPositions(getPositions());
                 monitor.setupPhase = false;
+                readyButton.setText("SHOOT");
+                gamePhase(mGrid, readyButton, PLAYER_ID, true);
             }
         });
 

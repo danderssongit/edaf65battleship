@@ -29,6 +29,9 @@ public class OnlineActivities extends AppCompatActivity {
     private ArrayList<Integer> positions;
     private int placedShips;
 
+    private final int SHIP = 0x1F6A2;
+    private final int MISS = 0x274C;
+
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
@@ -59,7 +62,7 @@ public class OnlineActivities extends AppCompatActivity {
                     Integer pos = new Integer(square.getCoord());
                     if (positions.size() < NBR_SHIPS_TO_PLACE) {
                         if (!positions.contains(pos)) {
-                            text.setText("S");
+                            text.setText(new String(Character.toChars(SHIP)));
                             square.shipToggle();
                             positions.add(square.getCoord());
                             placedShips++;
@@ -91,43 +94,26 @@ public class OnlineActivities extends AppCompatActivity {
 
     }
 
-//    public void setupPhase(GridLayout mGrid, int playerID, Boolean myTurn) {
-//        monitor = new Monitor(myTurn);
-//        final LayoutInflater inflater = LayoutInflater.from(this);
-//        for (int i = 1; i <= NBR_ITEMS; i++) {
-//            final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
-//            final TextView text = itemView.findViewById(R.id.text);
-//            if (i > 90  && i < 98) { // Ship starting positions
-//                text.setText("S");
-//                square = new Square(i, true);
-//                itemView.setTag(square);
-//                itemView.setOnLongClickListener(new LongPressListener()); // Only cells containing ships should be movable
-//            } else {
-//                text.setText("");
-//                square = new Square(i, false);
-//                itemView.setTag(square);
-//            }
-//            whatBoard(playerID).add(square);
-//            mGrid.addView(itemView);
-//
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    square = (Square) v.getTag();
-//                    if (!square.isPressed() && monitor.isMyTurn()) {
-//                        text.setText("o");
-//                        square.press();
-//                        monitor.changeTurn(square.getCoord());
-//                        if (square.isShip()) {
-//                            square.hit();
-//                        }
-//                    } else if(!monitor.isMyTurn()) {
-//                        System.out.println("Not your turn...");
-//                    }
-//                }
-//            });
-//        }
-//    }
+    public void gamePhase(final GridLayout mGrid, final Button readyButton, final int playerID, Boolean myTurn) {
+        final LayoutInflater inflater = LayoutInflater.from(this);
+        for (int i = 1; i <= NBR_ITEMS; i++) {
+            final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
+            final TextView text = itemView.findViewById(R.id.text);
+            text.setText("");
+            square = new Square(i, false);
+            itemView.setTag(square);
+            whatBoard(playerID).add(square);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    square = (Square) v.getTag();
+                    Integer pos = new Integer(square.getCoord());
+                    checkForHit(mGrid, 0, pos);
+                }
+            });
+            mGrid.addView(itemView);
+        }
 
+    }
 
     public void shoot(int squareID) {
         if (square.getCoord() == squareID) {
@@ -147,8 +133,10 @@ public class OnlineActivities extends AppCompatActivity {
         for (Square square : whatBoard(playerID)) {
             if ((square.getCoord() == squareID) && square.isShip()) {
                 square.hit(); //set status to hit
+                System.out.println("IT'S A HIT");
             } else if ((square.getCoord() == squareID)) {
                 square.pressToggle(); //set to miss instead
+                System.out.println("IT'S A MISS");
             }
         }
         updateView(mGrid, whatBoard(playerID));
@@ -163,7 +151,7 @@ public class OnlineActivities extends AppCompatActivity {
             if (square.isHit()) {
                 text.setText("X");
             } else if (square.isShip()) {
-                text.setText("S");
+                text.setText(new String(Character.toChars(SHIP)));
             } else if (square.isPressed()) {
                 text.setText("O");
             } else {
@@ -174,7 +162,7 @@ public class OnlineActivities extends AppCompatActivity {
     }
 
     public void fillEnemyBoard(ArrayList<Integer> positions){
-        for (Square square : whatBoard(1)){                 //TODO: Get enemy board
+        for (Square square : whatBoard(0)){                 //TODO: Get enemy board
             if(positions.contains(square.getCoord())){
                 square.putShip();
             }
