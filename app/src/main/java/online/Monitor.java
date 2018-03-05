@@ -1,8 +1,8 @@
 package online;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import android.support.v7.widget.GridLayout;
 
 /**
  * Created by otto on 2018-02-18.
@@ -59,7 +59,7 @@ public class Monitor extends OnlineActivities implements Serializable {
         return s;
     }
 
-    public void addEnemyPositions(String positions){
+    public void addEnemyPositions(GridLayout mGrid, String positions){
         enemyPositions = new ArrayList<>();
 
         String[] posArray = positions.split(":");
@@ -67,7 +67,7 @@ public class Monitor extends OnlineActivities implements Serializable {
                 enemyPositions.add(Integer.parseInt(pos));
         }
         System.out.println("ENEMY HAS SHIPS ON: " + enemyPositions);
-        fillEnemyBoard(enemyPositions);
+        fillEnemyBoard(mGrid, enemyPositions);
 
     }
 

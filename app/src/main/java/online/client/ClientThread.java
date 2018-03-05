@@ -1,6 +1,8 @@
 package online.client;
 
 import android.os.Handler;
+import android.support.v7.widget.GridLayout;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -21,6 +23,7 @@ public class ClientThread extends Thread {
 //    private final int ID = 1;
 //    private Handler turnHandler;
     private Monitor monitor;
+    private GridLayout mGrid;
     private InetAddress ia;
     private DatagramSocket socket;
     private String host;
@@ -28,10 +31,11 @@ public class ClientThread extends Thread {
     private String broadCastHost = "224.0.50.50";
 
 
-    public ClientThread(Monitor monitor) {
+    public ClientThread(Monitor monitor, GridLayout mGrid) {
 //        this.turnHandler = turnHandler;
 //        id = 1;
         this.monitor = monitor;
+        this.mGrid = mGrid;
         boolean done = false;
         try {
             Enumeration e = NetworkInterface.getNetworkInterfaces(); //returns a list with all interfaces
@@ -94,7 +98,7 @@ public class ClientThread extends Thread {
             socket.receive(receivePacket);
             String positions = new String(receivePacket.getData());
             positions = positions.substring(0, positions.indexOf("*"));
-            monitor.addEnemyPositions(positions);
+            monitor.addEnemyPositions(mGrid, positions);
         } catch (IOException e) {
             e.printStackTrace();
         }

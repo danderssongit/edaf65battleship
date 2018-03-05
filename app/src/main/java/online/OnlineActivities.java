@@ -56,6 +56,7 @@ public class OnlineActivities extends AppCompatActivity {
             square = new Square(i);
             itemView.setTag(square);
             whatBoard(playerID).add(square);
+            readyButton.setText("Place " + (NBR_SHIPS_TO_PLACE  - placedShips) + " more");
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -145,7 +146,7 @@ public class OnlineActivities extends AppCompatActivity {
 //        updateView(mGrid, whatBoard(playerID));
     }
 
-    public void updateView(ArrayList<Square> board) {
+    public void updateView(GridLayout mGrid, ArrayList<Square> board) {
         mGrid.removeAllViews();
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (Square square : board) {
@@ -165,7 +166,7 @@ public class OnlineActivities extends AppCompatActivity {
 
     }
 
-    public void fillEnemyBoard(ArrayList<Integer> positions){
+    public void fillEnemyBoard(GridLayout mGrid, ArrayList<Integer> positions){
 //        for (Square square : whatBoard(0)){                 //TODO: Get enemy board
 //            if(positions.contains(square.getCoord())){
 //                square.putShip();

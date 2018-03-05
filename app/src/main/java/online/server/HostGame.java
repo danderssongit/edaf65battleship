@@ -28,7 +28,7 @@ public class HostGame extends OnlineActivities {
 //        host.start();
 
         monitor = (Monitor) getIntent().getSerializableExtra("monitor");
-        server = new ServerThread(monitor);
+        server = new ServerThread(monitor, mGrid);
         server.start();
 
         TextView statusText = (TextView) findViewById(R.id.status);

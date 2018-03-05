@@ -23,13 +23,13 @@ public class JoinGame extends OnlineActivities {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
         monitor = (Monitor) getIntent().getSerializableExtra("monitor");
-        client = new ClientThread(monitor);
+        client = new ClientThread(monitor, mGrid);
         client.start();
 
         TextView statusText = (TextView) findViewById(R.id.status);
         statusText.setText("Click squares to position your ships!");
-        GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
         System.out.println(mGrid);
         final Button readyButton = (Button) this.findViewById(R.id.angry_btn);
         readyButton.setEnabled(false);

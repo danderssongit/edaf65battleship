@@ -1,5 +1,7 @@
 package online.server;
 
+import android.support.v7.widget.GridLayout;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -17,13 +19,15 @@ import online.Monitor;
 public class ServerThread extends GameThread {
 
     private Monitor monitor;
+    private GridLayout mGrid;
     private MulticastSocket ms;
     private InetAddress ia;
     private DatagramSocket socket;
     private String clientAddress;
 
-    public ServerThread(Monitor m){
-            this.monitor = m;
+    public ServerThread(Monitor monitor, GridLayout mGrid){
+            this.monitor = monitor;
+            this.mGrid = mGrid;
             id = 1;
     }
 
@@ -68,7 +72,7 @@ public class ServerThread extends GameThread {
             socket.receive(receivePacket);
             String positions = new String(receivePacket.getData());
             positions = positions.substring(0, positions.indexOf("*"));
-            monitor.addEnemyPositions(positions);
+            monitor.addEnemyPositions(mGrid, positions);
         } catch (IOException e) {
             e.printStackTrace();
         }
