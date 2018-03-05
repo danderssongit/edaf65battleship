@@ -2,6 +2,7 @@ package online.client;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import online.Monitor;
 import online.OnlineActivities;
 
+import se.lth.soc13dan.battleshipsedaf65.MainMenu;
 import se.lth.soc13dan.battleshipsedaf65.R;
 
 
@@ -87,8 +89,15 @@ public class JoinGame extends OnlineActivities {
         gameStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gamePhase(mGrid, gameStartButton, true, monitor.getEnemyPositions(), monitor);
-                gameStartButton.setVisibility(View.GONE);
+                if (monitor.getEnemyPositions().isEmpty()) {
+                    dialogBuilder.setMessage("No opponent found!");
+                    AlertDialog alertDialog = dialogBuilder.create();
+                    alertDialog.setCanceledOnTouchOutside(true);
+                    alertDialog.show();
+                } else {
+                    gamePhase(mGrid, gameStartButton, true, monitor.getEnemyPositions(), monitor);
+                    gameStartButton.setVisibility(View.GONE);
+                }
             }
         });
 

@@ -87,8 +87,15 @@ public class HostGame extends OnlineActivities {
         gameStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gamePhase(mGrid, gameStartButton, true, monitor.getEnemyPositions(), monitor);
-                gameStartButton.setVisibility(View.GONE);
+                if (monitor.getEnemyPositions().isEmpty()) {
+                    dialogBuilder.setMessage("No opponent found!");
+                    AlertDialog alertDialog = dialogBuilder.create();
+                    alertDialog.setCanceledOnTouchOutside(true);
+                    alertDialog.show();
+                } else {
+                    gamePhase(mGrid, gameStartButton, true, monitor.getEnemyPositions(), monitor);
+                    gameStartButton.setVisibility(View.GONE);
+                }
             }
         });
 

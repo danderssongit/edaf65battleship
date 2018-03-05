@@ -38,6 +38,7 @@ public class Monitor extends OnlineActivities implements Serializable {
         this.handler = handler;
         setupPhase = true;
         gameOver = false;
+        enemyPositions = new ArrayList<>();
     }
 
     public synchronized int waitTurn() {

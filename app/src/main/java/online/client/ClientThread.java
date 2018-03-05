@@ -69,6 +69,7 @@ public class ClientThread extends Thread {
             System.out.println("SENDING PACKET 1");
             socket.send(packet); //send the client ip to the multicast address (server)
             System.out.println("WAITING FOR PACKET 1");
+            if (socket == null) return;
             socket.receive(receivePacket);
             System.out.println("PACKET RECEIVED 1");
             destHost = receivePacket.getAddress(); //save the server address
@@ -88,6 +89,9 @@ public class ClientThread extends Thread {
             // Sending my ship positions
             data = monitor.getSetupPositions().getBytes();
             DatagramPacket myPositions = new DatagramPacket(data, data.length, destHost, 8080);
+            if (socket == null) {
+                return;
+            }
             socket.send(myPositions);
 
             // Waiting for opponent setup phase
@@ -107,6 +111,9 @@ public class ClientThread extends Thread {
             // Sending my score
             data = monitor.getScore().getBytes();
             DatagramPacket myPositions = new DatagramPacket(data, data.length, destHost, 8080);
+            if (socket == null) {
+                return;
+            }
             socket.send(myPositions);
 
             // Waiting for opponent setup phase
@@ -127,7 +134,7 @@ public class ClientThread extends Thread {
 
     public void killSockets() {
         if (socket != null) {
-            socket.disconnect();
+//            socket.disconnect();
             socket.close();
         }
     }

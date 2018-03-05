@@ -65,6 +65,9 @@ public class ServerThread extends GameThread {
             //Sending my ship positions
             buffer = monitor.getSetupPositions().getBytes();
             sendPacket = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(clientAddress), 8080);
+            if (socket == null) {
+                return;
+            }
             socket.send(sendPacket);
 
             // Waiting for opponent setup phase
@@ -84,6 +87,9 @@ public class ServerThread extends GameThread {
             // Sending my score
             buffer = monitor.getScore().getBytes();
             DatagramPacket myPositions = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(clientAddress), 8080);
+            if (socket == null) {
+                return;
+            }
             socket.send(myPositions);
 
             // Waiting for opponent setup phase
