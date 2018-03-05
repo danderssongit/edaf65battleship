@@ -19,7 +19,7 @@ import se.lth.soc13dan.battleshipsedaf65.Square;
 
 public class OnlineActivities extends AppCompatActivity {
     public static final int NBR_ITEMS = 36;
-    public static final int NBR_SHIPS_TO_PLACE = 1;
+    public static final int NBR_SHIPS_TO_PLACE = 6;
     public static final int MY_ID = 0;
     public static final int ENEMY_ID = 1;
     protected boolean yourTurn;
