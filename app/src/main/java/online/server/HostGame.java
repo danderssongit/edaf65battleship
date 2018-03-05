@@ -31,24 +31,38 @@ public class HostGame extends OnlineActivities {
         server = new ServerThread(monitor, mGrid);
         server.start();
 
-        TextView statusText = (TextView) findViewById(R.id.status);
+        final TextView statusText = (TextView) findViewById(R.id.status);
         statusText.setText("Click squares to position your ships!");
 
         mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
 
-        Button readyButton = (Button) this.findViewById(R.id.angry_btn);
-        readyButton.setEnabled(false);
-        readyButton.setOnClickListener(new View.OnClickListener() {
+        final Button gameStartButton = (Button) this.findViewById(R.id.ready_btn);
+        gameStartButton.setText("START GAME");
+        gameStartButton.setVisibility(View.GONE);
+        gameStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                updateView(mGrid, OnlineActivities.hostBoard);
-                monitor.addMyPositions(getPositions());
-                monitor.setupPhase = false;
+                gamePhase(mGrid, gameStartButton, true, monitor.getEnemyPositions(), monitor);
             }
         });
 
-        setupPhase(mGrid, readyButton, PLAYER_ID, false);
+        final Button readyButton = (Button) this.findViewById(R.id.angry_btn);
+        readyButton.setEnabled(false);
+        readyButton.setVisibility(View.VISIBLE);
+        readyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                updateView(mGrid, OnlineActivities.enemyBoard);
+                statusText.setText("");
+                monitor.addMyPositions(getMyPositions());
+                monitor.setupPhase = false;
+                readyButton.setVisibility(View.GONE);
+                gameStartButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        setupPhase(mGrid, readyButton, false);
     }
 
     @Override
@@ -56,10 +70,5 @@ public class HostGame extends OnlineActivities {
         server.interrupt();
         server.killSockets();
         super.finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
     }
 }

@@ -109,7 +109,7 @@ public class ClientThread extends Thread {
         while (!this.interrupted()) {
 //            Message msg = Message.obtain();
             try {
-//                int target = monitor.waitTurn();
+                int target = monitor.waitTurn();
 //                byte[] data = {(byte) target};
 //                DatagramPacket sendPacket = new DatagramPacket(data, data.length, destHost, 8080);
 //                socket.send(sendPacket);

@@ -25,6 +25,10 @@ public class Square {
         press = !press;
     }
 
+    public void setPressed(){
+        press = true;
+    }
+
     public void shipToggle(){
         isShip = !isShip;
     }

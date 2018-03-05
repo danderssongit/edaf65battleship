@@ -9,12 +9,10 @@ import android.widget.TextView;
 import online.Monitor;
 import online.OnlineActivities;
 
-import se.lth.soc13dan.battleshipsedaf65.DragListener;
 import se.lth.soc13dan.battleshipsedaf65.R;
 
 
 public class JoinGame extends OnlineActivities {
-    private final int PLAYER_ID = 1;
     private ClientThread client;
     private Monitor monitor;
 
@@ -23,26 +21,42 @@ public class JoinGame extends OnlineActivities {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
+        final GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
         monitor = (Monitor) getIntent().getSerializableExtra("monitor");
         client = new ClientThread(monitor, mGrid);
         client.start();
 
-        TextView statusText = (TextView) findViewById(R.id.status);
+        final TextView statusText = (TextView) findViewById(R.id.status);
         statusText.setText("Click squares to position your ships!");
         System.out.println(mGrid);
-        final Button readyButton = (Button) this.findViewById(R.id.angry_btn);
-        readyButton.setEnabled(false);
-        readyButton.setOnClickListener(new View.OnClickListener() {
+
+        final Button gameStartButton = (Button) this.findViewById(R.id.ready_btn);
+        gameStartButton.setText("START GAME");
+        gameStartButton.setVisibility(View.GONE);
+        gameStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                monitor.addMyPositions(getPositions());
-                monitor.setupPhase = false;
-//                gamePhase(mGrid, readyButton, PLAYER_ID, true);
+                gamePhase(mGrid, gameStartButton, true, monitor.getEnemyPositions(), monitor);
             }
         });
 
-        setupPhase(mGrid, readyButton, PLAYER_ID, true);
+        final Button readyButton = (Button) this.findViewById(R.id.angry_btn);
+        readyButton.setEnabled(false);
+        readyButton.setVisibility(View.VISIBLE);
+        readyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                statusText.setText("");
+                monitor.addMyPositions(getMyPositions());
+                monitor.setupPhase = false;
+                readyButton.setVisibility(View.GONE);
+                gameStartButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+
+        setupPhase(mGrid, readyButton, true);
     }
 
 

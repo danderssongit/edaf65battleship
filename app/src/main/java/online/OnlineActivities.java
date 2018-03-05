@@ -18,13 +18,15 @@ import se.lth.soc13dan.battleshipsedaf65.Square;
  */
 
 public class OnlineActivities extends AppCompatActivity {
-    public static final int NBR_ITEMS = 100;
+    public static final int NBR_ITEMS = 36;
     public static final int NBR_SHIPS_TO_PLACE = 5;
+    public static final int MY_ID = 0;
+    public static final int ENEMY_ID = 1;
     protected boolean yourTurn;
     private Square square;
-    public static ArrayList<Square> hostBoard;
-    public static ArrayList<Square> clientBoard;
-    private ArrayList<Integer> positions;
+    public static ArrayList<Square> enemyBoard;
+    public static ArrayList<Square> myBoard;
+    private ArrayList<Integer> myPositions;
     private ArrayList<Integer> enemyPositions;
     private int placedShips;
 
@@ -41,12 +43,13 @@ public class OnlineActivities extends AppCompatActivity {
 
     public OnlineActivities() {
         yourTurn = false;
-        hostBoard = new ArrayList<>();
-        clientBoard = new ArrayList<>();
-        positions = new ArrayList<>();
+        enemyBoard = new ArrayList<>();
+        myBoard = new ArrayList<>();
+        myPositions = new ArrayList<>();
+        enemyPositions = new ArrayList<>();
     }
 
-    public void setupPhase(GridLayout mGrid, final Button readyButton, int playerID, Boolean myTurn) {
+    public void setupPhase(GridLayout mGrid, final Button readyButton, Boolean myTurn) {
         placedShips = 0;
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
@@ -55,38 +58,38 @@ public class OnlineActivities extends AppCompatActivity {
             text.setText("");
             square = new Square(i);
             itemView.setTag(square);
-            whatBoard(playerID).add(square);
-            readyButton.setText("Place " + (NBR_SHIPS_TO_PLACE  - placedShips) + " more");
+            whatBoard(MY_ID).add(square);
+            readyButton.setText("Place " + (NBR_SHIPS_TO_PLACE - placedShips) + " more");
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     square = (Square) v.getTag();
                     Integer pos = new Integer(square.getCoord());
-                    if (positions.size() < NBR_SHIPS_TO_PLACE) {
-                        if (!positions.contains(pos)) {
+                    if (myPositions.size() < NBR_SHIPS_TO_PLACE) {
+                        if (!myPositions.contains(pos)) {
                             text.setText(new String(Character.toChars(SHIP)));
                             square.shipToggle();
-                            positions.add(square.getCoord());
+                            myPositions.add(square.getCoord());
                             placedShips++;
 
                         } else {
                             text.setText("");
                             square.shipToggle();
-                            positions.remove(pos);
+                            myPositions.remove(pos);
                             placedShips--;
                         }
-                    } else if (square.isShip()){
+                    } else if (square.isShip()) {
                         text.setText("");
                         square.shipToggle();
-                        positions.remove(pos);
+                        myPositions.remove(pos);
                         placedShips--;
                     }
-                    System.out.println(positions + ", ships placed: " + Integer.toString(placedShips) + ", positions size: " + positions.size());
+                    System.out.println(myPositions + ", ships placed: " + Integer.toString(placedShips) + ", myPositions size: " + myPositions.size());
                     if (placedShips == NBR_SHIPS_TO_PLACE) {
-                        readyButton.setText("Start Game");
+                        readyButton.setText("READY");
                         readyButton.setEnabled(true);
                     } else {
-                        readyButton.setText("Place " + (NBR_SHIPS_TO_PLACE  - placedShips) + " more");
+                        readyButton.setText("Place " + (NBR_SHIPS_TO_PLACE - placedShips) + " more");
                         readyButton.setEnabled(false);
                     }
                 }
@@ -96,25 +99,30 @@ public class OnlineActivities extends AppCompatActivity {
 
     }
 
-    public void gamePhase(final GridLayout mGrid, final Button readyButton, int playerID, Boolean myTurn) {
+    public void gamePhase(final GridLayout mGrid, final Button readyButton, Boolean myTurn, final ArrayList<Integer> enemyPositions, final Monitor monitor) {
         System.out.println("gamephase");
+        mGrid.removeAllViews();
+        System.out.println(enemyPositions);
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
             final TextView text = itemView.findViewById(R.id.text);
             text.setText("");
             square = new Square(i);
-            if (enemyPositions.contains(new Integer(i))) {
+            if (enemyPositions.contains(i)) {
                 square.putShip();
                 System.out.println(i);
             }
             itemView.setTag(square);
-            whatBoard(0).add(square);
+            whatBoard(ENEMY_ID).add(square);
             itemView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     square = (Square) v.getTag();
                     Integer pos = new Integer(square.getCoord());
-                    checkForHit(mGrid, 0, pos);
+                    checkForHit(enemyPositions, pos);
+                    updateView(mGrid, ENEMY_ID, enemyPositions);
+                    monitor.changeTurn(pos);
+
                 }
             });
             mGrid.addView(itemView);
@@ -128,54 +136,85 @@ public class OnlineActivities extends AppCompatActivity {
         }
     }
 
-    public ArrayList<Integer> getPositions(){
-        return positions;
+    public ArrayList<Integer> getMyPositions() {
+        return myPositions;
     }
 
 
-    public void checkForHit(GridLayout mGrid, int playerID, int squareID) {
-        for (Square square : whatBoard(playerID)) {
-            if ((square.getCoord() == squareID) && square.isShip()) {
-                square.hit(); //set status to hit
-                System.out.println("IT'S A HIT");
-            } else if ((square.getCoord() == squareID)) {
-                square.pressToggle(); //set to miss instead
-                System.out.println("IT'S A MISS");
-            }
+    public void checkForHit(ArrayList<Integer> enemyPositions, int pos) {
+//        for (Square square : whatBoard(playerID)) {
+//            if ((square.getCoord() == squareID) && square.isShip()) {
+//                square.hit(); //set status to hit
+//                System.out.println("IT'S A HIT");
+//            } else if ((square.getCoord() == squareID)) {
+//                square.setPressed(); //set to miss instead
+//                System.out.println("IT'S A MISS");
+//            }
+//        }
+
+        if (enemyPositions.contains(pos) && !square.isPressed()) {
+            square.hit();
+            System.out.println("IT'S A HIT");
+        } else if (!square.isPressed()) {
+            System.out.println("IT'S A MISS");
         }
-//        updateView(mGrid, whatBoard(playerID));
+        square.setPressed();
+//        updateView(mGrid, playerID);
     }
 
-    public void updateView(GridLayout mGrid, ArrayList<Square> board) {
+    public void updateView(final GridLayout mGrid, int playerId, final ArrayList<Integer> enemyPositions) {
         mGrid.removeAllViews();
+        ArrayList<Square> board = new ArrayList<>();
+        board.addAll(whatBoard(playerId));
         final LayoutInflater inflater = LayoutInflater.from(this);
-        for (Square square : board) {
+        for (final Square sq : board) {
+            this.square = sq;
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
             final TextView text = itemView.findViewById(R.id.text);
-            if (square.isHit()) {
-                text.setText(new String(Character.toChars(HIT)));
-            } else if (square.isShip()) {
-                text.setText(new String(Character.toChars(SHIP)));
-            } else if (square.isPressed()) {
-                text.setText("O");
+            itemView.setTag(square);
+
+            if (playerId == ENEMY_ID) {
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        square = (Square) v.getTag();
+                        if (!square.isPressed()) {
+                            Integer pos = new Integer(square.getCoord());
+                            checkForHit(enemyPositions, pos);
+                            updateView(mGrid, ENEMY_ID, enemyPositions);
+                        }
+                    }
+                });
+                if (square.isHit()) {
+                    text.setText(new String(Character.toChars(HIT)));
+                } else if (square.isPressed()) {
+                    text.setText(new String(Character.toChars(MISS)));
+                }
             } else {
-                text.setText("");
+                if (square.isHit()) {
+                    text.setText(new String(Character.toChars(HIT)));
+                } else if (square.isShip()) {
+                    text.setText(new String(Character.toChars(SHIP)));
+                } else if (square.isPressed()) {
+                    text.setText(new String(Character.toChars(MISS)));
+                } else {
+                    text.setText("");
+                }
             }
+
             mGrid.addView(itemView);
         }
 
     }
 
-    public void fillEnemyBoard(GridLayout mGrid, ArrayList<Integer> positions){
+
+    public void fillEnemyBoard(GridLayout mGrid, ArrayList<Integer> positions) {
 //        for (Square square : whatBoard(0)){                 //TODO: Get enemy board
-//            if(positions.contains(square.getCoord())){
+//            if(myPositions.contains(square.getCoord())){
 //                square.putShip();
 //            }
 //        }
-////        enemyPositions = new ArrayList<>(positions);
 //        updateView(whatBoard(0));
 
-        mGrid.removeAllViews();
 
 //        final LayoutInflater inflater = LayoutInflater.from(this);
 //        for (int i = 1; i <= NBR_ITEMS; i++) {
@@ -184,7 +223,7 @@ public class OnlineActivities extends AppCompatActivity {
 //            final TextView text = itemView.findViewById(R.id.text);
 //            text.setText("");
 //            square = new Square(i);
-//            if (positions.contains(new Integer(i))) {
+//            if (myPositions.contains(new Integer(i))) {
 //                square.putShip();
 //                System.out.println(i);
 //            }
@@ -203,10 +242,10 @@ public class OnlineActivities extends AppCompatActivity {
     }
 
     private ArrayList<Square> whatBoard(int playerID) {
-        if (playerID == 0) {
-            return hostBoard;
+        if (playerID == 1) {
+            return enemyBoard;
         } else {
-            return clientBoard;
+            return myBoard;
         }
     }
 }
