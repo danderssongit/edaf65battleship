@@ -85,7 +85,7 @@ public class ClientThread extends Thread {
         }
 
         try {
-//            Sending my ship positions
+            // Sending my ship positions
             data = monitor.getSetupPositions().getBytes();
             DatagramPacket myPositions = new DatagramPacket(data, data.length, destHost, 8080);
             socket.send(myPositions);

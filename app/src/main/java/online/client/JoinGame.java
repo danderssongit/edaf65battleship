@@ -29,9 +29,8 @@ public class JoinGame extends OnlineActivities {
 
         TextView statusText = (TextView) findViewById(R.id.status);
         statusText.setText("Click squares to position your ships!");
-        final GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
-        mGrid.setOnDragListener(new DragListener(mGrid));
-
+        GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
+        System.out.println(mGrid);
         final Button readyButton = (Button) this.findViewById(R.id.angry_btn);
         readyButton.setEnabled(false);
         readyButton.setOnClickListener(new View.OnClickListener() {
@@ -39,11 +38,13 @@ public class JoinGame extends OnlineActivities {
             public void onClick(View view) {
                 monitor.addMyPositions(getPositions());
                 monitor.setupPhase = false;
+//                gamePhase(mGrid, readyButton, PLAYER_ID, true);
             }
         });
 
         setupPhase(mGrid, readyButton, PLAYER_ID, true);
     }
+
 
     @Override
     public void finish() {

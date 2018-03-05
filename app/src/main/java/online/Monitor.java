@@ -21,7 +21,6 @@ public class Monitor extends OnlineActivities implements Serializable {
 //        turn = 1;
         this.myTurn = myTurn;
         setupPhase = true;
-
     }
 
     public synchronized int waitTurn() {

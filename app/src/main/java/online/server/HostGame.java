@@ -15,7 +15,6 @@ import se.lth.soc13dan.battleshipsedaf65.R;
 
 public class HostGame extends OnlineActivities {
     private final int PLAYER_ID = 0;
-    private HostThread host;
     private ServerThread server;
     private GridLayout mGrid;
     private Monitor monitor;
@@ -54,7 +53,6 @@ public class HostGame extends OnlineActivities {
 
     @Override
     public void finish() {
-        host.interrupt();
         server.interrupt();
         server.killSockets();
         super.finish();

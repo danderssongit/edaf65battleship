@@ -1,18 +1,15 @@
 package online;
 
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v7.widget.GridLayout;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
-import se.lth.soc13dan.battleshipsedaf65.LongPressListener;
 import se.lth.soc13dan.battleshipsedaf65.R;
 import se.lth.soc13dan.battleshipsedaf65.Square;
 
@@ -31,7 +28,6 @@ public class OnlineActivities extends AppCompatActivity {
     private ArrayList<Integer> enemyPositions;
     private int placedShips;
 
-    private GridLayout mGrid;
 
     private final int SHIP = 0x1F6A2;
     private final int MISS = 0x274C;
@@ -51,7 +47,6 @@ public class OnlineActivities extends AppCompatActivity {
     }
 
     public void setupPhase(GridLayout mGrid, final Button readyButton, int playerID, Boolean myTurn) {
-        this.mGrid = mGrid;
         placedShips = 0;
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
@@ -100,10 +95,8 @@ public class OnlineActivities extends AppCompatActivity {
 
     }
 
-    public void gamePhase() {
+    public void gamePhase(final GridLayout mGrid, final Button readyButton, int playerID, Boolean myTurn) {
         System.out.println("gamephase");
-        mGrid.removeAllViews();
-        System.out.println("gamephase2");
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
@@ -152,7 +145,7 @@ public class OnlineActivities extends AppCompatActivity {
 //        updateView(mGrid, whatBoard(playerID));
     }
 
-    public void updateView(GridLayout mGrid, ArrayList<Square> board) {
+    public void updateView(ArrayList<Square> board) {
         mGrid.removeAllViews();
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (Square square : board) {
@@ -173,14 +166,39 @@ public class OnlineActivities extends AppCompatActivity {
     }
 
     public void fillEnemyBoard(ArrayList<Integer> positions){
-        for (Square square : whatBoard(0)){                 //TODO: Get enemy board
-            if(positions.contains(square.getCoord())){
-                square.putShip();
-            }
-        }
-        enemyPositions = new ArrayList<>(positions);
-        gamePhase();
+//        for (Square square : whatBoard(0)){                 //TODO: Get enemy board
+//            if(positions.contains(square.getCoord())){
+//                square.putShip();
+//            }
+//        }
+////        enemyPositions = new ArrayList<>(positions);
+//        updateView(whatBoard(0));
 
+        mGrid.removeAllViews();
+
+//        final LayoutInflater inflater = LayoutInflater.from(this);
+//        for (int i = 1; i <= NBR_ITEMS; i++) {
+//            final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
+//            System.out.println("2");
+//            final TextView text = itemView.findViewById(R.id.text);
+//            text.setText("");
+//            square = new Square(i);
+//            if (positions.contains(new Integer(i))) {
+//                square.putShip();
+//                System.out.println(i);
+//            }
+//            itemView.setTag(square);
+//            whatBoard(0).add(square);
+//
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                public void onClick(View v) {
+//                    square = (Square) v.getTag();
+//                    Integer pos = new Integer(square.getCoord());
+//                    checkForHit(mGrid, 0, pos);
+//                }
+//            });
+////            mGrid.addView(itemView);
+//        }
     }
 
     private ArrayList<Square> whatBoard(int playerID) {

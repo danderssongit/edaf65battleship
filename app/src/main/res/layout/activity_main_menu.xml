@@ -14,14 +14,18 @@
 
     <TextView
         android:id="@+id/title"
+        android:textColor="#FFFF0F"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Battleshit"
+        android:text="BATTLESHIPS"
+        android:textStyle="bold"
         android:textSize="40sp" />
 
     <Button
         android:id="@+id/hostButton"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/host_button"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -30,6 +34,8 @@
 
     <Button
         android:id="@+id/joinButton"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/join_button"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
