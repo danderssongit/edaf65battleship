@@ -25,13 +25,13 @@ public class ServerThread extends GameThread {
     private DatagramSocket socket;
     private String clientAddress;
 
-    public ServerThread(Monitor monitor, GridLayout mGrid){
-            this.monitor = monitor;
-            this.mGrid = mGrid;
-            id = 1;
+    public ServerThread(Monitor monitor, GridLayout mGrid) {
+        this.monitor = monitor;
+        this.mGrid = mGrid;
+        id = 1;
     }
 
-    public void run(){
+    public void run() {
         byte[] buffer = new byte[64];
         DatagramPacket receivePacket = new DatagramPacket(buffer, buffer.length);
         DatagramPacket sendPacket = new DatagramPacket(buffer, buffer.length);
@@ -56,8 +56,8 @@ public class ServerThread extends GameThread {
             e.printStackTrace();
         }
 
-        while(monitor.setupPhase){
-            }
+        while (monitor.setupPhase) {
+        }
 
         System.out.println("SETUP PHASE END");
 
@@ -66,7 +66,6 @@ public class ServerThread extends GameThread {
             buffer = monitor.getSetupPositions().getBytes();
             sendPacket = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(clientAddress), 8080);
             socket.send(sendPacket);
-            receivePacket = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(clientAddress), 8080);
 
             // Waiting for opponent setup phase
             socket.receive(receivePacket);
@@ -78,32 +77,51 @@ public class ServerThread extends GameThread {
         }
 
 
-        while(!this.isInterrupted()){
-            try{
-                byte[] data = new byte[8];
-                receivePacket = new DatagramPacket(data, data.length);
-                socket.receive(receivePacket);
-                System.out.println("Got shot on square: " + new String(receivePacket.getData()));
-
-
-//                int target = monitor.waitTurn();
-//                data = {(byte) target};
-//                DatagramPacket sendPacket = new DatagramPacket(data, data.length,  InetAddress.getByName(clientAddress), 8080);
-//                socket.send(sendPacket);
-//                System.out.println("Shooting square: " + target);
-
-
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+        while (!monitor.gameOver) {
         }
+
+        try {
+            // Sending my score
+            buffer = monitor.getScore().getBytes();
+            DatagramPacket myPositions = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(clientAddress), 8080);
+            socket.send(myPositions);
+
+            // Waiting for opponent setup phase
+            socket.receive(receivePacket);
+            String score = new String(receivePacket.getData());
+            System.out.println("Enemy score: " + score);
+            monitor.setEnemyScore(Integer.parseInt(score.substring(0, score.indexOf("*"))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+//        while(!this.isInterrupted()){
+//            try{
+//                byte[] data = new byte[8];
+//                receivePacket = new DatagramPacket(data, data.length);
+//                socket.receive(receivePacket);
+//                System.out.println("Got shot on square: " + new String(receivePacket.getData()));
+//
+//
+////                int target = monitor.waitTurn();
+////                data = {(byte) target};
+////                DatagramPacket sendPacket = new DatagramPacket(data, data.length,  InetAddress.getByName(clientAddress), 8080);
+////                socket.send(sendPacket);
+////                System.out.println("Shooting square: " + target);
+//
+//
+//            }catch(Exception e){
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     public void killSockets() {
         if (ms != null) {
             ms.close();
         }
-        if (socket != null){
+        if (socket != null) {
             socket.close();
         }
     }

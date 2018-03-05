@@ -2,25 +2,42 @@ package online;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayout;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import online.server.HostGame;
+import se.lth.soc13dan.battleshipsedaf65.GameOver;
+import se.lth.soc13dan.battleshipsedaf65.MainMenu;
 
 /**
  * Created by otto on 2018-02-18.
  */
 
 public class Monitor extends OnlineActivities implements Serializable {
-    private int turn;
+    private int turn, score, enemyScore;
     private int target;
-    private boolean myTurn;
+    public boolean myTurn, gameOver;
     private ArrayList<Integer> myPositions, enemyPositions;
+    private Handler handler;
 
 
     public boolean setupPhase;
 
-    public Monitor(boolean myTurn) {
+    public Monitor(boolean myTurn, Handler handler) {
 //        turn = 1;
         this.myTurn = myTurn;
+        this.handler = handler;
         setupPhase = true;
+        gameOver = false;
     }
 
     public synchronized int waitTurn() {
@@ -45,13 +62,22 @@ public class Monitor extends OnlineActivities implements Serializable {
         return myTurn;
     }
 
-    public void addMyPositions(ArrayList<Integer> positions){
+    public void registerScore(int score) {
+        this.score = score;
+        gameOver = true;
+    }
+
+    public String getScore() {
+        return Integer.toString(score) + "*";
+    }
+
+    public void addMyPositions(ArrayList<Integer> positions) {
         this.myPositions = positions;
     }
 
     public String getSetupPositions() {
         String s = "";
-        for(Integer pos : myPositions){
+        for (Integer pos : myPositions) {
             s += pos.toString() + ":";
         }
         s += "*";
@@ -59,19 +85,37 @@ public class Monitor extends OnlineActivities implements Serializable {
         return s;
     }
 
-    public void addEnemyPositions(GridLayout mGrid, String positions){
+    public void addEnemyPositions(GridLayout mGrid, String positions) {
         enemyPositions = new ArrayList<>();
 
         String[] posArray = positions.split(":");
-        for(String pos : posArray) {
-                enemyPositions.add(Integer.parseInt(pos));
+        for (String pos : posArray) {
+            enemyPositions.add(Integer.parseInt(pos));
         }
         System.out.println("ENEMY HAS SHIPS ON: " + enemyPositions);
         fillEnemyBoard(mGrid, enemyPositions);
 
     }
 
-    public ArrayList<Integer> getEnemyPositions(){
+    public ArrayList<Integer> getEnemyPositions() {
         return enemyPositions;
+    }
+
+    public void setEnemyScore(int score) {
+        enemyScore = score;
+        compareScore();
+    }
+
+    public void compareScore() {
+        Message msg = Message.obtain();
+        msg.arg1 = score;
+        msg.arg2 = enemyScore;
+
+        if (enemyScore < score) {
+            msg.what = 2;
+        } else {
+            msg.what = 1;
+        }
+        handler.sendMessage(msg);
     }
 }

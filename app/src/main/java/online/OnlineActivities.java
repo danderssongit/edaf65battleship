@@ -19,7 +19,7 @@ import se.lth.soc13dan.battleshipsedaf65.Square;
 
 public class OnlineActivities extends AppCompatActivity {
     public static final int NBR_ITEMS = 36;
-    public static final int NBR_SHIPS_TO_PLACE = 5;
+    public static final int NBR_SHIPS_TO_PLACE = 1;
     public static final int MY_ID = 0;
     public static final int ENEMY_ID = 1;
     protected boolean yourTurn;
@@ -28,7 +28,7 @@ public class OnlineActivities extends AppCompatActivity {
     public static ArrayList<Square> myBoard;
     private ArrayList<Integer> myPositions;
     private ArrayList<Integer> enemyPositions;
-    private int placedShips;
+    private int placedShips, hits, attempt;
 
 
     private final int SHIP = 0x1F6A2;
@@ -119,9 +119,9 @@ public class OnlineActivities extends AppCompatActivity {
                 public void onClick(View v) {
                     square = (Square) v.getTag();
                     Integer pos = new Integer(square.getCoord());
-                    checkForHit(enemyPositions, pos);
-                    updateView(mGrid, ENEMY_ID, enemyPositions);
-                    monitor.changeTurn(pos);
+                    checkForHit(enemyPositions, pos, monitor);
+                    updateView(mGrid, ENEMY_ID, enemyPositions, monitor);
+//                    monitor.changeTurn(pos);
 
                 }
             });
@@ -141,7 +141,7 @@ public class OnlineActivities extends AppCompatActivity {
     }
 
 
-    public void checkForHit(ArrayList<Integer> enemyPositions, int pos) {
+    public void checkForHit(ArrayList<Integer> enemyPositions, int pos, Monitor monitor) {
 //        for (Square square : whatBoard(playerID)) {
 //            if ((square.getCoord() == squareID) && square.isShip()) {
 //                square.hit(); //set status to hit
@@ -153,6 +153,11 @@ public class OnlineActivities extends AppCompatActivity {
 //        }
 
         if (enemyPositions.contains(pos) && !square.isPressed()) {
+            hits++;
+            if (hits == NBR_SHIPS_TO_PLACE) {
+                System.out.println(hits);
+                monitor.registerScore(attempt);
+            }
             square.hit();
             System.out.println("IT'S A HIT");
         } else if (!square.isPressed()) {
@@ -162,7 +167,7 @@ public class OnlineActivities extends AppCompatActivity {
 //        updateView(mGrid, playerID);
     }
 
-    public void updateView(final GridLayout mGrid, int playerId, final ArrayList<Integer> enemyPositions) {
+    public void updateView(final GridLayout mGrid, int playerId, final ArrayList<Integer> enemyPositions, final Monitor monitor) {
         mGrid.removeAllViews();
         ArrayList<Square> board = new ArrayList<>();
         board.addAll(whatBoard(playerId));
@@ -177,10 +182,12 @@ public class OnlineActivities extends AppCompatActivity {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         square = (Square) v.getTag();
-                        if (!square.isPressed()) {
+                        if (!square.isPressed() && hits != NBR_SHIPS_TO_PLACE) {
+                            attempt++;
+                            System.out.println(attempt);
                             Integer pos = new Integer(square.getCoord());
-                            checkForHit(enemyPositions, pos);
-                            updateView(mGrid, ENEMY_ID, enemyPositions);
+                            checkForHit(enemyPositions, pos, monitor);
+                            updateView(mGrid, ENEMY_ID, enemyPositions, monitor);
                         }
                     }
                 });

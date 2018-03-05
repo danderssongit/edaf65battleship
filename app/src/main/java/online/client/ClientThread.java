@@ -20,7 +20,7 @@ import online.Monitor;
  */
 
 public class ClientThread extends Thread {
-//    private final int ID = 1;
+    //    private final int ID = 1;
 //    private Handler turnHandler;
     private Monitor monitor;
     private GridLayout mGrid;
@@ -39,15 +39,12 @@ public class ClientThread extends Thread {
         boolean done = false;
         try {
             Enumeration e = NetworkInterface.getNetworkInterfaces(); //returns a list with all interfaces
-            while(e.hasMoreElements() && !done)
-            {
+            while (e.hasMoreElements() && !done) {
                 NetworkInterface n = (NetworkInterface) e.nextElement();
                 Enumeration ee = n.getInetAddresses(); //returns a list with all inet-addresses which are associated with the interface
-                while (ee.hasMoreElements())
-                {
+                while (ee.hasMoreElements()) {
                     InetAddress i = (InetAddress) ee.nextElement();
-                    if (i instanceof Inet4Address && !i.isLoopbackAddress())
-                    {
+                    if (i instanceof Inet4Address && !i.isLoopbackAddress()) {
                         host = i.getHostAddress(); //returns the inet-address for the client
                         done = true;
                         break;
@@ -62,7 +59,7 @@ public class ClientThread extends Thread {
         }
     }
 
-    public void run(){
+    public void run() {
         byte[] data = new byte[64];
         DatagramPacket receivePacket = new DatagramPacket(data, data.length);
         try {
@@ -78,14 +75,13 @@ public class ClientThread extends Thread {
             System.out.println("HELLO: " + destHost.toString() + "! Waiting for setup.");
 
 
-
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        while(monitor.setupPhase){
+        while (monitor.setupPhase) {
         }
 
         try {
@@ -104,29 +100,33 @@ public class ClientThread extends Thread {
         }
 
 
+        while (!monitor.gameOver) {
+        }
 
+        try {
+            // Sending my score
+            data = monitor.getScore().getBytes();
+            DatagramPacket myPositions = new DatagramPacket(data, data.length, destHost, 8080);
+            socket.send(myPositions);
 
-        while (!this.interrupted()) {
-//            Message msg = Message.obtain();
-            try {
-                int target = monitor.waitTurn();
-//                byte[] data = {(byte) target};
-//                DatagramPacket sendPacket = new DatagramPacket(data, data.length, destHost, 8080);
-//                socket.send(sendPacket);
-//                System.out.println("Shooting square: " + target);
+            // Waiting for opponent setup phase
+            socket.receive(receivePacket);
+            String score = new String(receivePacket.getData());
+            System.out.println("Enemy score: " + Integer.parseInt(score.substring(0, score.indexOf("*"))));
+            monitor.setEnemyScore(Integer.parseInt(score.substring(0, score.indexOf("*"))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        while (!this.isInterrupted()) {
 
-            } catch (Exception e) {
-                System.out.println("IO error " + e);
-
-            }
         }
 
         return;
     }
 
     public void killSockets() {
-        if (socket != null){
+        if (socket != null) {
             socket.disconnect();
             socket.close();
         }

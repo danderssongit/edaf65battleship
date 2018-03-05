@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import online.client.JoinGame;
@@ -17,6 +19,8 @@ public class MainMenu extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main_menu);
 
 
@@ -27,7 +31,7 @@ public class MainMenu extends AppCompatActivity {
         hostButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                monitor = new Monitor(false);
+//                monitor = new Monitor(false);
                 hostGame(monitor);
             }
         });
@@ -35,7 +39,7 @@ public class MainMenu extends AppCompatActivity {
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                monitor = new Monitor(true);
+//                monitor = new Monitor(true);
                 joinGame(monitor);
             }
         });
@@ -43,13 +47,13 @@ public class MainMenu extends AppCompatActivity {
 
     public void hostGame(Monitor monitor) {
         intent = new Intent(getApplicationContext(), HostGame.class);
-        intent.putExtra("monitor", monitor);
+//        intent.putExtra("monitor", monitor);
         startActivity(intent);
     }
 
     public void joinGame(Monitor monitor) {
         intent = new Intent(getApplicationContext(), JoinGame.class);
-        intent.putExtra("monitor", monitor);
+//        intent.putExtra("monitor", monitor);
         startActivity(intent);
     }
 }
