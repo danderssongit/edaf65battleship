@@ -71,4 +71,8 @@ public class Monitor extends OnlineActivities implements Serializable {
         fillEnemyBoard(enemyPositions);
 
     }
+
+    public ArrayList<Integer> getEnemyPositions(){
+        return enemyPositions;
+    }
 }

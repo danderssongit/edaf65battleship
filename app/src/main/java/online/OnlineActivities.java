@@ -1,6 +1,7 @@
 package online;
 
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v7.widget.GridLayout;
@@ -27,10 +28,14 @@ public class OnlineActivities extends AppCompatActivity {
     public static ArrayList<Square> hostBoard;
     public static ArrayList<Square> clientBoard;
     private ArrayList<Integer> positions;
+    private ArrayList<Integer> enemyPositions;
     private int placedShips;
+
+    private GridLayout mGrid;
 
     private final int SHIP = 0x1F6A2;
     private final int MISS = 0x274C;
+    private final int HIT = 0x1F525;
 
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +51,14 @@ public class OnlineActivities extends AppCompatActivity {
     }
 
     public void setupPhase(GridLayout mGrid, final Button readyButton, int playerID, Boolean myTurn) {
+        this.mGrid = mGrid;
         placedShips = 0;
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
             final TextView text = itemView.findViewById(R.id.text);
             text.setText("");
-            square = new Square(i, false);
+            square = new Square(i);
             itemView.setTag(square);
             whatBoard(playerID).add(square);
 
@@ -94,15 +100,22 @@ public class OnlineActivities extends AppCompatActivity {
 
     }
 
-    public void gamePhase(final GridLayout mGrid, final Button readyButton, final int playerID, Boolean myTurn) {
+    public void gamePhase() {
+        System.out.println("gamephase");
+        mGrid.removeAllViews();
+        System.out.println("gamephase2");
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
             final TextView text = itemView.findViewById(R.id.text);
             text.setText("");
-            square = new Square(i, false);
+            square = new Square(i);
+            if (enemyPositions.contains(new Integer(i))) {
+                square.putShip();
+                System.out.println(i);
+            }
             itemView.setTag(square);
-            whatBoard(playerID).add(square);
+            whatBoard(0).add(square);
             itemView.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     square = (Square) v.getTag();
@@ -125,9 +138,6 @@ public class OnlineActivities extends AppCompatActivity {
         return positions;
     }
 
-//    public ArrayList<Integer> getSetupPositions(){
-//        return positions;
-//    }
 
     public void checkForHit(GridLayout mGrid, int playerID, int squareID) {
         for (Square square : whatBoard(playerID)) {
@@ -139,7 +149,7 @@ public class OnlineActivities extends AppCompatActivity {
                 System.out.println("IT'S A MISS");
             }
         }
-        updateView(mGrid, whatBoard(playerID));
+//        updateView(mGrid, whatBoard(playerID));
     }
 
     public void updateView(GridLayout mGrid, ArrayList<Square> board) {
@@ -149,7 +159,7 @@ public class OnlineActivities extends AppCompatActivity {
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
             final TextView text = itemView.findViewById(R.id.text);
             if (square.isHit()) {
-                text.setText("X");
+                text.setText(new String(Character.toChars(HIT)));
             } else if (square.isShip()) {
                 text.setText(new String(Character.toChars(SHIP)));
             } else if (square.isPressed()) {
@@ -159,6 +169,7 @@ public class OnlineActivities extends AppCompatActivity {
             }
             mGrid.addView(itemView);
         }
+
     }
 
     public void fillEnemyBoard(ArrayList<Integer> positions){
@@ -167,6 +178,9 @@ public class OnlineActivities extends AppCompatActivity {
                 square.putShip();
             }
         }
+        enemyPositions = new ArrayList<>(positions);
+        gamePhase();
+
     }
 
     private ArrayList<Square> whatBoard(int playerID) {

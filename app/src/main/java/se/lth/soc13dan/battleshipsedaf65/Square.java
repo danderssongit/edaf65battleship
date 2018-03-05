@@ -6,14 +6,14 @@ package se.lth.soc13dan.battleshipsedaf65;
 
 public class Square {
     private int id;
-    private boolean press;
-    private boolean isShip;
-    private boolean isHit;
+    private boolean press = false;
+    private boolean isShip = false;
+    private boolean isHit = false;
 
-    public Square(int id, boolean isShip){
+    public Square(int id){
         this.id = id;
         press = false;
-        this.isShip = isShip;
+        isShip = false;
         this.isHit = false;
     }
 

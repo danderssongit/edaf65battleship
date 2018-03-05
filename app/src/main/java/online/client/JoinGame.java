@@ -37,11 +37,8 @@ public class JoinGame extends OnlineActivities {
         readyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                updateView(mGrid, OnlineActivities.hostBoard);
                 monitor.addMyPositions(getPositions());
                 monitor.setupPhase = false;
-                readyButton.setText("SHOOT");
-                gamePhase(mGrid, readyButton, PLAYER_ID, true);
             }
         });
 
