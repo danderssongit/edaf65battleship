@@ -116,7 +116,7 @@ public class ServerThread extends GameThread {
             msg.arg1 = monitor.getScoreInt();
             msg.arg2 = points;
 
-            if(points > msg.arg1){
+            if(points < msg.arg1){
                 msg.what = DEFEAT;
             } else {
                 msg.what = VICTORY;
