@@ -1,6 +1,7 @@
 package online;
 
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v7.widget.GridLayout;
@@ -108,7 +109,6 @@ public class OnlineActivities extends AppCompatActivity {
         for (int i = 1; i <= NBR_ITEMS; i++) {
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
             final TextView text = itemView.findViewById(R.id.text);
-            final TextView status = itemView.findViewById(R.id.status);
             text.setText("");
             square = new Square(i);
             if (monitor.getEnemyPositions().contains(i)) {
@@ -121,7 +121,7 @@ public class OnlineActivities extends AppCompatActivity {
                 public void onClick(View v) {
                     square = (Square) v.getTag();
                     Integer pos = new Integer(square.getCoord());
-                    checkForHit(monitor.getEnemyPositions(), pos, monitor, status);
+                    checkForHit(monitor.getEnemyPositions(), pos, monitor, itemView);
                     updateView(mGrid, ENEMY_ID, monitor.getEnemyPositions(), monitor);
 //                    monitor.changeTurn(pos);
 
@@ -143,7 +143,7 @@ public class OnlineActivities extends AppCompatActivity {
     }
 
 
-    public void checkForHit(ArrayList<Integer> enemyPositions, int pos, Monitor monitor, TextView text) {
+    public void checkForHit(ArrayList<Integer> enemyPositions, int pos, Monitor monitor, View view) {
 //        for (Square square : whatBoard(playerID)) {
 //            if ((square.getCoord() == squareID) && square.isShip()) {
 //                square.hit(); //set status to hit
@@ -158,7 +158,8 @@ public class OnlineActivities extends AppCompatActivity {
             hits++;
             if (hits == NBR_SHIPS_TO_PLACE) {
                 System.out.println(hits);
-                text.setText("Done! Wait for opponent to finish..");
+                final TextView statusText = view.findViewById(R.id.status);
+                statusText.setText("Done! Wait for opponent to finish..");
                 monitor.registerScore(attempt);
             }
             square.hit();
@@ -190,7 +191,7 @@ public class OnlineActivities extends AppCompatActivity {
                             attempt++;
                             System.out.println(attempt);
                             Integer pos = new Integer(square.getCoord());
-                            checkForHit(enemyPositions, pos, monitor, statusText);
+                            checkForHit(enemyPositions, pos, monitor, itemView);
                             updateView(mGrid, ENEMY_ID, enemyPositions, monitor);
                         }
                     }
