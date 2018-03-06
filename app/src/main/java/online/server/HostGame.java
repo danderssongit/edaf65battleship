@@ -36,11 +36,9 @@ public class HostGame extends OnlineActivities {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_game);
 
-//        monitor = (Monitor) getIntent().getSerializableExtra("monitor");
-
         final TextView statusText = (TextView) findViewById(R.id.status);
-
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+
         dialogBuilder.setPositiveButton("GG", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
@@ -56,7 +54,6 @@ public class HostGame extends OnlineActivities {
         final Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                System.out.println("MESSAGE RECIEVED");
                 switch (msg.what) {
                     case (VICTORY):
                         dialogBuilder.setMessage("Congratulations, you won! Your score: " + msg.arg1 + "! Enemy score: " + msg.arg2);
@@ -64,10 +61,14 @@ public class HostGame extends OnlineActivities {
                     case (DEFEAT):
                         dialogBuilder.setMessage("You lost, better luck next time! Your score: " + msg.arg1 + "! Enemy score: " + msg.arg2);
                         break;
+                    case (SHOTRECEIVED):
+//                        monitor.setTurn(true);
+                        statusText.setText("It's your turn!");
+                        break;
                 }
-                AlertDialog alertDialog = dialogBuilder.create();
-                alertDialog.setCanceledOnTouchOutside(true);
-                alertDialog.show();
+//                AlertDialog alertDialog = dialogBuilder.create();
+//                alertDialog.setCanceledOnTouchOutside(true);
+//                alertDialog.show();
             }
 
         };

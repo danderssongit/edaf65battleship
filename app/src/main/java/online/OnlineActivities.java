@@ -1,5 +1,6 @@
 package online;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -100,7 +101,6 @@ public class OnlineActivities extends AppCompatActivity {
     }
 
     public void gamePhase(final GridLayout mGrid, final Button readyButton, Boolean myTurn, final ArrayList<Integer> enemyPositions, final Monitor monitor) {
-        System.out.println("gamephase");
         mGrid.removeAllViews();
         System.out.println(enemyPositions);
         final LayoutInflater inflater = LayoutInflater.from(this);
@@ -116,19 +116,20 @@ public class OnlineActivities extends AppCompatActivity {
             itemView.setTag(square);
             whatBoard(ENEMY_ID).add(square);
             itemView.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    square = (Square) v.getTag();
-                    Integer pos = new Integer(square.getCoord());
-                    checkForHit(enemyPositions, pos, monitor);
-                    updateView(mGrid, ENEMY_ID, enemyPositions, monitor);
-//                    monitor.changeTurn(pos);
-
-                }
-            });
+                                            public void onClick(View v) {
+                                                square = (Square) v.getTag();
+                                                Integer pos = new Integer(square.getCoord());
+                                                checkForHit(enemyPositions, pos);
+                                                updateView(mGrid, ENEMY_ID, enemyPositions, monitor);
+                                                monitor.changeTurn(pos);
+                                            }
+                                        }
+            );
             mGrid.addView(itemView);
         }
 
     }
+
 
     public void shoot(int squareID) {
         if (square.getCoord() == squareID) {
@@ -141,30 +142,14 @@ public class OnlineActivities extends AppCompatActivity {
     }
 
 
-    public void checkForHit(ArrayList<Integer> enemyPositions, int pos, Monitor monitor) {
-//        for (Square square : whatBoard(playerID)) {
-//            if ((square.getCoord() == squareID) && square.isShip()) {
-//                square.hit(); //set status to hit
-//                System.out.println("IT'S A HIT");
-//            } else if ((square.getCoord() == squareID)) {
-//                square.setPressed(); //set to miss instead
-//                System.out.println("IT'S A MISS");
-//            }
-//        }
-
+    public void checkForHit(ArrayList<Integer> enemyPositions, int pos) {
         if (enemyPositions.contains(pos) && !square.isPressed()) {
-            hits++;
-            if (hits == NBR_SHIPS_TO_PLACE) {
-                System.out.println(hits);
-                monitor.registerScore(attempt);
-            }
             square.hit();
             System.out.println("IT'S A HIT");
         } else if (!square.isPressed()) {
             System.out.println("IT'S A MISS");
         }
         square.setPressed();
-//        updateView(mGrid, playerID);
     }
 
     public void updateView(final GridLayout mGrid, int playerId, final ArrayList<Integer> enemyPositions, final Monitor monitor) {
@@ -182,12 +167,11 @@ public class OnlineActivities extends AppCompatActivity {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         square = (Square) v.getTag();
-                        if (!square.isPressed() && hits != NBR_SHIPS_TO_PLACE) {
-                            attempt++;
-                            System.out.println(attempt);
+                        if (!square.isPressed() && hits != NBR_SHIPS_TO_PLACE && monitor.isMyTurn()) {
                             Integer pos = new Integer(square.getCoord());
-                            checkForHit(enemyPositions, pos, monitor);
+                            checkForHit(enemyPositions, pos);
                             updateView(mGrid, ENEMY_ID, enemyPositions, monitor);
+                            monitor.changeTurn(pos);
                         }
                     }
                 });

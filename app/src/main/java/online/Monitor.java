@@ -34,14 +34,14 @@ public class Monitor extends OnlineActivities implements Serializable {
 
     public Monitor(boolean myTurn, Handler handler) {
 //        turn = 1;
-        this.myTurn = myTurn;
+        this.myTurn = false;
         this.handler = handler;
         setupPhase = true;
         gameOver = false;
         enemyPositions = new ArrayList<>();
     }
 
-    public synchronized int waitTurn() {
+    public synchronized String waitTurn() {
         while (!myTurn) {
             try {
                 wait();
@@ -49,18 +49,26 @@ public class Monitor extends OnlineActivities implements Serializable {
                 e.printStackTrace();
             }
         }
-        return target;
+        myTurn = false;
+        return Integer.toString(target) + "*";
     }
 
-    public synchronized void changeTurn(int i) {
-        turn = (turn + 1) % 2; // swaps between 1 and 0
-        target = i;
-        myTurn = !myTurn;
+    public synchronized void changeTurn(int shot) {
+        target = shot;
+        myTurn = true;
         notifyAll();
     }
 
     public boolean isMyTurn() {
         return myTurn;
+    }
+
+    public void toggleTurn(){
+        myTurn = !myTurn;
+    }
+
+    public void setTurn(boolean what){
+        myTurn = what;
     }
 
     public void registerScore(int score) {
@@ -117,6 +125,18 @@ public class Monitor extends OnlineActivities implements Serializable {
         } else {
             msg.what = 1;
         }
+        handler.sendMessage(msg);
+    }
+
+    public void saveShot(int shot) {
+        target = shot;
+    }
+
+    public String loadShot(){
+        return Integer.toString(target);
+    }
+
+    public void processEnemyShot(Message msg) {
         handler.sendMessage(msg);
     }
 }

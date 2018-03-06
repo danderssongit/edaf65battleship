@@ -22,7 +22,7 @@ import se.lth.soc13dan.battleshipsedaf65.R;
 
 public class JoinGame extends OnlineActivities {
     private ClientThread client;
-    private Monitor monitor;
+    private static Monitor monitor;
 
     private static final int VICTORY = 1;
     private static final int DEFEAT = 2;
@@ -51,10 +51,9 @@ public class JoinGame extends OnlineActivities {
             }
         });
 
-        final Handler handler = new Handler() {
+        Handler handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                System.out.println("MESSAGE RECIEVED");
                 switch (msg.what) {
                     case (VICTORY):
                         dialogBuilder.setMessage("Congratulations, you won! Your score: " + msg.arg1 + "! Enemy score: " + msg.arg2);
@@ -62,21 +61,22 @@ public class JoinGame extends OnlineActivities {
                     case (DEFEAT):
                         dialogBuilder.setMessage("You lost, better luck next time! Your score: " + msg.arg1 + "! Enemy score: " + msg.arg2);
                         break;
-//                    case(SHOTRECEIVED):
-//                        updateEnemy(msg.arg1);
-//                        break;
-//                    }
+                    case(SHOTRECEIVED):
+//                        monitor.setTurn(true);
+                        statusText.setText("It's your turn!");
+                        break;
                 }
-                AlertDialog alertDialog = dialogBuilder.create();
-                alertDialog.setCanceledOnTouchOutside(true);
-                alertDialog.show();
+//                AlertDialog alertDialog = dialogBuilder.create();
+//                alertDialog.setCanceledOnTouchOutside(true);
+//                alertDialog.show();
             }
 
         };
 
         final GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
-//        monitor = (Monitor) getIntent().getSerializableExtra("monitor");
         final Monitor monitor = new Monitor(true, handler);
+        this.monitor = monitor;
+//        monitor = (Monitor) getIntent().getSerializableExtra("monitor");
         client = new ClientThread(monitor, mGrid);
         client.start();
 

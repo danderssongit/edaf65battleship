@@ -1,6 +1,7 @@
 package online.client;
 
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayout;
 
 import java.io.IOException;
@@ -29,6 +30,8 @@ public class ClientThread extends Thread {
     private String host;
     private InetAddress destHost;
     private String broadCastHost = "224.0.50.50";
+
+    private static final int SHOTRECEIVED = 3;
 
 
     public ClientThread(Monitor monitor, GridLayout mGrid) {
@@ -104,28 +107,50 @@ public class ClientThread extends Thread {
         }
 
 
-        while (!monitor.gameOver) {
-        }
-
-        try {
-            // Sending my score
-            data = monitor.getScore().getBytes();
-            DatagramPacket myPositions = new DatagramPacket(data, data.length, destHost, 8080);
-            if (socket == null) {
-                return;
-            }
-            socket.send(myPositions);
-
-            // Waiting for opponent setup phase
-            socket.receive(receivePacket);
-            String score = new String(receivePacket.getData());
-            System.out.println("Enemy score: " + Integer.parseInt(score.substring(0, score.indexOf("*"))));
-            monitor.setEnemyScore(Integer.parseInt(score.substring(0, score.indexOf("*"))));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+//        while (!monitor.gameOver) {
+//        }
+//
+//        try {
+//            // Sending my score
+//            data = monitor.getScore().getBytes();
+//            DatagramPacket myPositions = new DatagramPacket(data, data.length, destHost, 8080);
+//            if (socket == null) {
+//                return;
+//            }
+//            socket.send(myPositions);
+//
+//            // Waiting for opponent setup phase
+//            socket.receive(receivePacket);
+//            String score = new String(receivePacket.getData());
+//            System.out.println("Enemy score: " + Integer.parseInt(score.substring(0, score.indexOf("*"))));
+//            monitor.setEnemyScore(Integer.parseInt(score.substring(0, score.indexOf("*"))));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        System.out.println("GAME BEGIN");
         while (!this.isInterrupted()) {
+            try{
+                data = monitor.waitTurn().getBytes();
+                System.out.println("SENDING MY SHOT");
+                DatagramPacket shoot = new DatagramPacket(data, data.length, destHost, 8080);
+                socket.send(shoot);
+
+                System.out.println("WAITING FOR OPPONENT SHOT");
+                data = new byte[64];
+                DatagramPacket response = new DatagramPacket(data, data.length);
+                socket.receive(response);
+
+                String shot = new String(response.getData());
+                shot = shot.substring(0, shot.indexOf("*"));
+                Message msg = Message.obtain();
+                msg.what = SHOTRECEIVED;
+                msg.arg1 = Integer.parseInt(shot);
+                System.out.println("Shot received:" + msg.arg1);
+
+                monitor.processEnemyShot(msg);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         }
 
