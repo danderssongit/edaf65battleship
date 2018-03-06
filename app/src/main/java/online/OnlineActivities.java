@@ -1,13 +1,17 @@
 package online;
 
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v7.widget.GridLayout;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -36,11 +40,12 @@ public class OnlineActivities extends AppCompatActivity {
     private final int MISS = 0x274C;
     private final int HIT = 0x1F525;
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        yourTurn = false;
-//    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.activity_game);
+    }
 
     public OnlineActivities() {
         yourTurn = false;
@@ -121,7 +126,7 @@ public class OnlineActivities extends AppCompatActivity {
                 public void onClick(View v) {
                     square = (Square) v.getTag();
                     Integer pos = new Integer(square.getCoord());
-                    checkForHit(monitor.getEnemyPositions(), pos, monitor, itemView);
+                    checkForHit(monitor.getEnemyPositions(), pos, monitor);
                     updateView(mGrid, ENEMY_ID, monitor.getEnemyPositions(), monitor);
 //                    monitor.changeTurn(pos);
 
@@ -131,6 +136,7 @@ public class OnlineActivities extends AppCompatActivity {
         }
 
     }
+
 
     public void shoot(int squareID) {
         if (square.getCoord() == squareID) {
@@ -143,7 +149,7 @@ public class OnlineActivities extends AppCompatActivity {
     }
 
 
-    public void checkForHit(ArrayList<Integer> enemyPositions, int pos, Monitor monitor, View view) {
+    public void checkForHit(ArrayList<Integer> enemyPositions, int pos, Monitor monitor) {
 //        for (Square square : whatBoard(playerID)) {
 //            if ((square.getCoord() == squareID) && square.isShip()) {
 //                square.hit(); //set status to hit
@@ -158,8 +164,8 @@ public class OnlineActivities extends AppCompatActivity {
             hits++;
             if (hits == NBR_SHIPS_TO_PLACE) {
                 System.out.println(hits);
-                final TextView statusText = view.findViewById(R.id.status);
-                statusText.setText("Done! Wait for opponent to finish..");
+                final TextView statusText = (TextView) findViewById(R.id.status);
+                statusText.setText("Well done! Wait for opponent to finish..");
                 monitor.registerScore(attempt);
             }
             square.hit();
@@ -191,7 +197,7 @@ public class OnlineActivities extends AppCompatActivity {
                             attempt++;
                             System.out.println(attempt);
                             Integer pos = new Integer(square.getCoord());
-                            checkForHit(enemyPositions, pos, monitor, itemView);
+                            checkForHit(enemyPositions, pos, monitor);
                             updateView(mGrid, ENEMY_ID, enemyPositions, monitor);
                         }
                     }
