@@ -102,6 +102,7 @@ public class OnlineActivities extends AppCompatActivity {
     public void gamePhase(final GridLayout mGrid, final Monitor monitor) {
         System.out.println("gamephase");
         mGrid.removeAllViews();
+        mGrid.setVisibility(View.VISIBLE);
         System.out.println(monitor.getEnemyPositions());
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {

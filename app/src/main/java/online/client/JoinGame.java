@@ -115,6 +115,7 @@ public class JoinGame extends OnlineActivities {
             @Override
             public void onClick(View view) {
                 statusText.setText("Awaiting opponent..");
+                mGrid.setVisibility(View.GONE);
                 monitor.addMyPositions(getMyPositions());
                 monitor.setupPhase = false;
                 readyButton.setVisibility(View.GONE);
