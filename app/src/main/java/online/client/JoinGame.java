@@ -67,13 +67,14 @@ public class JoinGame extends OnlineActivities {
                         break;
                     case (DEFEAT):
                         System.out.println("DEFEAT");
+                        dialogBuilder.setMessage("You lost, better luck next time! Your score: " + msg.arg1 + "! Enemy score: " + msg.arg2);
                         AlertDialog alertDialog2 = dialogBuilder.create();
                         alertDialog2.setCanceledOnTouchOutside(true);
                         alertDialog2.show();
-                        dialogBuilder.setMessage("You lost, better luck next time! Your score: " + msg.arg1 + "! Enemy score: " + msg.arg2);
                         break;
                     case(SETUPRECEIVED):
                         System.out.println("SETUPRECEIVED");
+                        statusText.setText("Find all enemy ships!");
                         gamePhase(mGrid, monitor);
                         break;
 //                    }
@@ -113,7 +114,7 @@ public class JoinGame extends OnlineActivities {
         readyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                statusText.setText("");
+                statusText.setText("Awaiting opponent..");
                 monitor.addMyPositions(getMyPositions());
                 monitor.setupPhase = false;
                 readyButton.setVisibility(View.GONE);

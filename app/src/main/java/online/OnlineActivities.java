@@ -19,7 +19,7 @@ import se.lth.soc13dan.battleshipsedaf65.Square;
 
 public class OnlineActivities extends AppCompatActivity {
     public static final int NBR_ITEMS = 36;
-    public static final int NBR_SHIPS_TO_PLACE = 1;
+    public static final int NBR_SHIPS_TO_PLACE = 6;
     public static final int MY_ID = 0;
     public static final int ENEMY_ID = 1;
     protected boolean yourTurn;
@@ -107,6 +107,7 @@ public class OnlineActivities extends AppCompatActivity {
         for (int i = 1; i <= NBR_ITEMS; i++) {
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
             final TextView text = itemView.findViewById(R.id.text);
+            final TextView status = itemView.findViewById(R.id.status);
             text.setText("");
             square = new Square(i);
             if (monitor.getEnemyPositions().contains(i)) {
@@ -119,7 +120,7 @@ public class OnlineActivities extends AppCompatActivity {
                 public void onClick(View v) {
                     square = (Square) v.getTag();
                     Integer pos = new Integer(square.getCoord());
-                    checkForHit(monitor.getEnemyPositions(), pos, monitor);
+                    checkForHit(monitor.getEnemyPositions(), pos, monitor, status);
                     updateView(mGrid, ENEMY_ID, monitor.getEnemyPositions(), monitor);
 //                    monitor.changeTurn(pos);
 
@@ -141,7 +142,7 @@ public class OnlineActivities extends AppCompatActivity {
     }
 
 
-    public void checkForHit(ArrayList<Integer> enemyPositions, int pos, Monitor monitor) {
+    public void checkForHit(ArrayList<Integer> enemyPositions, int pos, Monitor monitor, TextView text) {
 //        for (Square square : whatBoard(playerID)) {
 //            if ((square.getCoord() == squareID) && square.isShip()) {
 //                square.hit(); //set status to hit
@@ -156,6 +157,7 @@ public class OnlineActivities extends AppCompatActivity {
             hits++;
             if (hits == NBR_SHIPS_TO_PLACE) {
                 System.out.println(hits);
+                text.setText("Done! Wait for opponent to finish..");
                 monitor.registerScore(attempt);
             }
             square.hit();
@@ -176,6 +178,7 @@ public class OnlineActivities extends AppCompatActivity {
             this.square = sq;
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
             final TextView text = itemView.findViewById(R.id.text);
+            final TextView statusText = itemView.findViewById(R.id.status);
             itemView.setTag(square);
 
             if (playerId == ENEMY_ID) {
@@ -186,7 +189,7 @@ public class OnlineActivities extends AppCompatActivity {
                             attempt++;
                             System.out.println(attempt);
                             Integer pos = new Integer(square.getCoord());
-                            checkForHit(enemyPositions, pos, monitor);
+                            checkForHit(enemyPositions, pos, monitor, statusText);
                             updateView(mGrid, ENEMY_ID, enemyPositions, monitor);
                         }
                     }

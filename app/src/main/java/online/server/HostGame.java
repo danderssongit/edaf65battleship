@@ -71,6 +71,7 @@ public class HostGame extends OnlineActivities {
                         alertDialog2.show();
                         break;
                     case(SETUPRECEIVED):
+                        statusText.setText("Find all enemy ships!");
                         gamePhase(mGrid, monitor);
                         break;
 //                    }
@@ -112,7 +113,7 @@ public class HostGame extends OnlineActivities {
         readyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                statusText.setText("");
+                statusText.setText("Awaiting opponent..");
                 monitor.addMyPositions(getMyPositions());
                 monitor.setupPhase = false;
                 readyButton.setVisibility(View.GONE);
