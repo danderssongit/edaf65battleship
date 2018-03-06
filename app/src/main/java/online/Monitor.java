@@ -27,15 +27,13 @@ public class Monitor extends OnlineActivities implements Serializable {
     private int target;
     public boolean myTurn, gameOver;
     private ArrayList<Integer> myPositions, enemyPositions;
-    private Handler handler;
 
 
     public boolean setupPhase;
 
-    public Monitor(boolean myTurn, Handler handler) {
+    public Monitor(boolean myTurn) {
 //        turn = 1;
         this.myTurn = myTurn;
-        this.handler = handler;
         setupPhase = true;
         gameOver = false;
         enemyPositions = new ArrayList<>();
@@ -117,6 +115,5 @@ public class Monitor extends OnlineActivities implements Serializable {
         } else {
             msg.what = 1;
         }
-        handler.sendMessage(msg);
     }
 }

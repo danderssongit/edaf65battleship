@@ -1,5 +1,7 @@
 package online.server;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.GridLayout;
 
 import java.io.IOException;
@@ -19,13 +21,20 @@ import online.Monitor;
 public class ServerThread extends GameThread {
 
     private Monitor monitor;
+    private Handler handler;
     private GridLayout mGrid;
     private MulticastSocket ms;
     private InetAddress ia;
     private DatagramSocket socket;
     private String clientAddress;
 
-    public ServerThread(Monitor monitor, GridLayout mGrid) {
+    private static final int VICTORY = 1;
+    private static final int DEFEAT = 2;
+    private static final int SETUPRECEIVED = 3;
+
+
+    public ServerThread(Monitor monitor, GridLayout mGrid, Handler handler) {
+        this.handler = handler;
         this.monitor = monitor;
         this.mGrid = mGrid;
         id = 1;
@@ -75,6 +84,10 @@ public class ServerThread extends GameThread {
             String positions = new String(receivePacket.getData());
             positions = positions.substring(0, positions.indexOf("*"));
             monitor.addEnemyPositions(mGrid, positions);
+
+            Message msg = Message.obtain();
+            msg.what = SETUPRECEIVED;
+            handler.sendMessage(msg);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -95,8 +108,20 @@ public class ServerThread extends GameThread {
             // Waiting for opponent setup phase
             socket.receive(receivePacket);
             String score = new String(receivePacket.getData());
-            System.out.println("Enemy score: " + score);
-            monitor.setEnemyScore(Integer.parseInt(score.substring(0, score.indexOf("*"))));
+            System.out.println("Enemy score: " + Integer.parseInt(score.substring(0, score.indexOf("*"))));
+            int points = Integer.parseInt(score.substring(0, score.indexOf("*")));
+            monitor.setEnemyScore(points);
+
+            Message msg = Message.obtain();
+            msg.arg1 = Integer.parseInt(monitor.getScore());
+            msg.arg2 = points;
+
+            if(points > msg.arg1){
+                msg.what = DEFEAT;
+            } else {
+                msg.what = VICTORY;
+            }
+            handler.sendMessage(msg);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -26,7 +26,7 @@ public class JoinGame extends OnlineActivities {
 
     private static final int VICTORY = 1;
     private static final int DEFEAT = 2;
-    private static final int SHOTRECEIVED = 3;
+    private static final int SETUPRECEIVED = 3;
 
 
     @Override
@@ -37,8 +37,10 @@ public class JoinGame extends OnlineActivities {
         setContentView(R.layout.activity_game);
 
         final TextView statusText = (TextView) findViewById(R.id.status);
-
+        final GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        final Monitor monitor = new Monitor(true);
+
         dialogBuilder.setPositiveButton("GG", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
@@ -57,14 +59,17 @@ public class JoinGame extends OnlineActivities {
                 System.out.println("MESSAGE RECIEVED");
                 switch (msg.what) {
                     case (VICTORY):
+                        System.out.println("VICTORY");
                         dialogBuilder.setMessage("Congratulations, you won! Your score: " + msg.arg1 + "! Enemy score: " + msg.arg2);
                         break;
                     case (DEFEAT):
+                        System.out.println("DEFEAT");
                         dialogBuilder.setMessage("You lost, better luck next time! Your score: " + msg.arg1 + "! Enemy score: " + msg.arg2);
                         break;
-//                    case(SHOTRECEIVED):
-//                        updateEnemy(msg.arg1);
-//                        break;
+                    case(SETUPRECEIVED):
+                        System.out.println("SETUPRECEIVED");
+                        gamePhase(mGrid, monitor);
+                        break;
 //                    }
                 }
                 AlertDialog alertDialog = dialogBuilder.create();
@@ -74,32 +79,30 @@ public class JoinGame extends OnlineActivities {
 
         };
 
-        final GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
 //        monitor = (Monitor) getIntent().getSerializableExtra("monitor");
-        final Monitor monitor = new Monitor(true, handler);
-        client = new ClientThread(monitor, mGrid);
+        client = new ClientThread(monitor, mGrid, handler);
         client.start();
 
         statusText.setText("Click squares to position your ships!");
         System.out.println(mGrid);
 
-        final Button gameStartButton = (Button) this.findViewById(R.id.ready_btn);
-        gameStartButton.setText("START GAME");
-        gameStartButton.setVisibility(View.GONE);
-        gameStartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (monitor.getEnemyPositions().isEmpty()) {
-                    dialogBuilder.setMessage("No opponent found!");
-                    AlertDialog alertDialog = dialogBuilder.create();
-                    alertDialog.setCanceledOnTouchOutside(true);
-                    alertDialog.show();
-                } else {
-                    gamePhase(mGrid, gameStartButton, true, monitor.getEnemyPositions(), monitor);
-                    gameStartButton.setVisibility(View.GONE);
-                }
-            }
-        });
+//        final Button gameStartButton = (Button) this.findViewById(R.id.ready_btn);
+//        gameStartButton.setText("START GAME");
+//        gameStartButton.setVisibility(View.GONE);
+//        gameStartButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (monitor.getEnemyPositions().isEmpty()) {
+//                    dialogBuilder.setMessage("No opponent found!");
+//                    AlertDialog alertDialog = dialogBuilder.create();
+//                    alertDialog.setCanceledOnTouchOutside(true);
+//                    alertDialog.show();
+//                } else {
+//                    gamePhase(mGrid, gameStartButton, true, monitor.getEnemyPositions(), monitor);
+//                    gameStartButton.setVisibility(View.GONE);
+//                }
+//            }
+//        });
 
         final Button readyButton = (Button) this.findViewById(R.id.angry_btn);
         readyButton.setEnabled(false);
@@ -111,7 +114,7 @@ public class JoinGame extends OnlineActivities {
                 monitor.addMyPositions(getMyPositions());
                 monitor.setupPhase = false;
                 readyButton.setVisibility(View.GONE);
-                gameStartButton.setVisibility(View.VISIBLE);
+//                gameStartButton.setVisibility(View.VISIBLE);
             }
         });
 

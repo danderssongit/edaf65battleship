@@ -20,14 +20,13 @@ import se.lth.soc13dan.battleshipsedaf65.R;
 
 
 public class HostGame extends OnlineActivities {
-    private final int PLAYER_ID = 0;
     private ServerThread server;
     private GridLayout mGrid;
     private Monitor monitor;
 
     private static final int VICTORY = 1;
     private static final int DEFEAT = 2;
-    private static final int SHOTRECEIVED = 3;
+    private static final int SETUPRECEIVED = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +63,10 @@ public class HostGame extends OnlineActivities {
                     case (DEFEAT):
                         dialogBuilder.setMessage("You lost, better luck next time! Your score: " + msg.arg1 + "! Enemy score: " + msg.arg2);
                         break;
+                    case(SETUPRECEIVED):
+                        gamePhase(mGrid, monitor);
+                        break;
+//                    }
                 }
                 AlertDialog alertDialog = dialogBuilder.create();
                 alertDialog.setCanceledOnTouchOutside(true);
@@ -72,8 +75,8 @@ public class HostGame extends OnlineActivities {
 
         };
 
-        final Monitor monitor = new Monitor(false, handler);
-        server = new ServerThread(monitor, mGrid);
+        final Monitor monitor = new Monitor(false);
+        server = new ServerThread(monitor, mGrid, handler);
         server.start();
 
         statusText.setText("Click squares to position your ships!");
@@ -81,23 +84,23 @@ public class HostGame extends OnlineActivities {
         mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
 
-        final Button gameStartButton = (Button) this.findViewById(R.id.ready_btn);
-        gameStartButton.setText("START GAME");
-        gameStartButton.setVisibility(View.GONE);
-        gameStartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (monitor.getEnemyPositions().isEmpty()) {
-                    dialogBuilder.setMessage("No opponent found!");
-                    AlertDialog alertDialog = dialogBuilder.create();
-                    alertDialog.setCanceledOnTouchOutside(true);
-                    alertDialog.show();
-                } else {
-                    gamePhase(mGrid, gameStartButton, true, monitor.getEnemyPositions(), monitor);
-                    gameStartButton.setVisibility(View.GONE);
-                }
-            }
-        });
+//        final Button gameStartButton = (Button) this.findViewById(R.id.ready_btn);
+//        gameStartButton.setText("START GAME");
+//        gameStartButton.setVisibility(View.GONE);
+//        gameStartButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (monitor.getEnemyPositions().isEmpty()) {
+//                    dialogBuilder.setMessage("No opponent found!");
+//                    AlertDialog alertDialog = dialogBuilder.create();
+//                    alertDialog.setCanceledOnTouchOutside(true);
+//                    alertDialog.show();
+//                } else {
+//                    gamePhase(mGrid, gameStartButton, true, monitor.getEnemyPositions(), monitor);
+//                    gameStartButton.setVisibility(View.GONE);
+//                }
+//            }
+//        });
 
         final Button readyButton = (Button) this.findViewById(R.id.angry_btn);
         readyButton.setEnabled(false);
@@ -109,7 +112,7 @@ public class HostGame extends OnlineActivities {
                 monitor.addMyPositions(getMyPositions());
                 monitor.setupPhase = false;
                 readyButton.setVisibility(View.GONE);
-                gameStartButton.setVisibility(View.VISIBLE);
+//                gameStartButton.setVisibility(View.VISIBLE);
             }
         });
 

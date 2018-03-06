@@ -99,17 +99,17 @@ public class OnlineActivities extends AppCompatActivity {
 
     }
 
-    public void gamePhase(final GridLayout mGrid, final Button readyButton, Boolean myTurn, final ArrayList<Integer> enemyPositions, final Monitor monitor) {
+    public void gamePhase(final GridLayout mGrid, final Monitor monitor) {
         System.out.println("gamephase");
         mGrid.removeAllViews();
-        System.out.println(enemyPositions);
+        System.out.println(monitor.getEnemyPositions());
         final LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 1; i <= NBR_ITEMS; i++) {
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
             final TextView text = itemView.findViewById(R.id.text);
             text.setText("");
             square = new Square(i);
-            if (enemyPositions.contains(i)) {
+            if (monitor.getEnemyPositions().contains(i)) {
                 square.putShip();
                 System.out.println(i);
             }
@@ -119,8 +119,8 @@ public class OnlineActivities extends AppCompatActivity {
                 public void onClick(View v) {
                     square = (Square) v.getTag();
                     Integer pos = new Integer(square.getCoord());
-                    checkForHit(enemyPositions, pos, monitor);
-                    updateView(mGrid, ENEMY_ID, enemyPositions, monitor);
+                    checkForHit(monitor.getEnemyPositions(), pos, monitor);
+                    updateView(mGrid, ENEMY_ID, monitor.getEnemyPositions(), monitor);
 //                    monitor.changeTurn(pos);
 
                 }
