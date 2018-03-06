@@ -37,8 +37,9 @@ public class HostGame extends OnlineActivities {
 
 //        monitor = (Monitor) getIntent().getSerializableExtra("monitor");
 
-        final TextView statusText = (TextView) findViewById(R.id.status);
 
+        final TextView statusText = (TextView) findViewById(R.id.status);
+        final Monitor monitor = new Monitor(false);
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setPositiveButton("GG", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -59,23 +60,26 @@ public class HostGame extends OnlineActivities {
                 switch (msg.what) {
                     case (VICTORY):
                         dialogBuilder.setMessage("Congratulations, you won! Your score: " + msg.arg1 + "! Enemy score: " + msg.arg2);
+                        AlertDialog alertDialog = dialogBuilder.create();
+                        alertDialog.setCanceledOnTouchOutside(true);
+                        alertDialog.show();
                         break;
                     case (DEFEAT):
                         dialogBuilder.setMessage("You lost, better luck next time! Your score: " + msg.arg1 + "! Enemy score: " + msg.arg2);
+                        AlertDialog alertDialog2 = dialogBuilder.create();
+                        alertDialog2.setCanceledOnTouchOutside(true);
+                        alertDialog2.show();
                         break;
                     case(SETUPRECEIVED):
                         gamePhase(mGrid, monitor);
                         break;
 //                    }
                 }
-                AlertDialog alertDialog = dialogBuilder.create();
-                alertDialog.setCanceledOnTouchOutside(true);
-                alertDialog.show();
+
             }
 
         };
 
-        final Monitor monitor = new Monitor(false);
         server = new ServerThread(monitor, mGrid, handler);
         server.start();
 

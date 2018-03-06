@@ -61,9 +61,15 @@ public class JoinGame extends OnlineActivities {
                     case (VICTORY):
                         System.out.println("VICTORY");
                         dialogBuilder.setMessage("Congratulations, you won! Your score: " + msg.arg1 + "! Enemy score: " + msg.arg2);
+                        AlertDialog alertDialog = dialogBuilder.create();
+                        alertDialog.setCanceledOnTouchOutside(true);
+                        alertDialog.show();
                         break;
                     case (DEFEAT):
                         System.out.println("DEFEAT");
+                        AlertDialog alertDialog2 = dialogBuilder.create();
+                        alertDialog2.setCanceledOnTouchOutside(true);
+                        alertDialog2.show();
                         dialogBuilder.setMessage("You lost, better luck next time! Your score: " + msg.arg1 + "! Enemy score: " + msg.arg2);
                         break;
                     case(SETUPRECEIVED):
@@ -72,9 +78,7 @@ public class JoinGame extends OnlineActivities {
                         break;
 //                    }
                 }
-                AlertDialog alertDialog = dialogBuilder.create();
-                alertDialog.setCanceledOnTouchOutside(true);
-                alertDialog.show();
+
             }
 
         };
@@ -84,7 +88,6 @@ public class JoinGame extends OnlineActivities {
         client.start();
 
         statusText.setText("Click squares to position your ships!");
-        System.out.println(mGrid);
 
 //        final Button gameStartButton = (Button) this.findViewById(R.id.ready_btn);
 //        gameStartButton.setText("START GAME");

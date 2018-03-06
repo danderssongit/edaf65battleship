@@ -70,6 +70,10 @@ public class Monitor extends OnlineActivities implements Serializable {
         return Integer.toString(score) + "*";
     }
 
+    public int getScoreInt() {
+        return score;
+    }
+
     public void addMyPositions(ArrayList<Integer> positions) {
         this.myPositions = positions;
     }

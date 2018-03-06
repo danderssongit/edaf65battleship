@@ -113,7 +113,7 @@ public class ServerThread extends GameThread {
             monitor.setEnemyScore(points);
 
             Message msg = Message.obtain();
-            msg.arg1 = Integer.parseInt(monitor.getScore());
+            msg.arg1 = monitor.getScoreInt();
             msg.arg2 = points;
 
             if(points > msg.arg1){
