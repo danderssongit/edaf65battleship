@@ -125,27 +125,6 @@ public class ServerThread extends GameThread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-//        while(!this.isInterrupted()){
-//            try{
-//                byte[] data = new byte[8];
-//                receivePacket = new DatagramPacket(data, data.length);
-//                socket.receive(receivePacket);
-//                System.out.println("Got shot on square: " + new String(receivePacket.getData()));
-//
-//
-////                int target = monitor.waitTurn();
-////                data = {(byte) target};
-////                DatagramPacket sendPacket = new DatagramPacket(data, data.length,  InetAddress.getByName(clientAddress), 8080);
-////                socket.send(sendPacket);
-////                System.out.println("Shooting square: " + target);
-//
-//
-//            }catch(Exception e){
-//                e.printStackTrace();
-//            }
-//        }
     }
 
     public void killSockets() {

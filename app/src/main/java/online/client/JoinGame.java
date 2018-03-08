@@ -36,6 +36,7 @@ public class JoinGame extends OnlineActivities {
         setContentView(R.layout.activity_game);
 
         final TextView statusText = (TextView) findViewById(R.id.status);
+        final Button readyButton = (Button) this.findViewById(R.id.angry_btn);
         final GridLayout mGrid = (GridLayout) findViewById(R.id.grid_layout);
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         final Monitor monitor = new Monitor(true);
@@ -83,31 +84,11 @@ public class JoinGame extends OnlineActivities {
 
         };
 
-//        monitor = (Monitor) getIntent().getSerializableExtra("monitor");
         client = new ClientThread(monitor, mGrid, handler);
         client.start();
 
         statusText.setText("Click squares to position your ships!");
 
-//        final Button gameStartButton = (Button) this.findViewById(R.id.ready_btn);
-//        gameStartButton.setText("START GAME");
-//        gameStartButton.setVisibility(View.GONE);
-//        gameStartButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (monitor.getEnemyPositions().isEmpty()) {
-//                    dialogBuilder.setMessage("No opponent found!");
-//                    AlertDialog alertDialog = dialogBuilder.create();
-//                    alertDialog.setCanceledOnTouchOutside(true);
-//                    alertDialog.show();
-//                } else {
-//                    gamePhase(mGrid, gameStartButton, true, monitor.getEnemyPositions(), monitor);
-//                    gameStartButton.setVisibility(View.GONE);
-//                }
-//            }
-//        });
-
-        final Button readyButton = (Button) this.findViewById(R.id.angry_btn);
         readyButton.setEnabled(false);
         readyButton.setVisibility(View.VISIBLE);
         readyButton.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +99,6 @@ public class JoinGame extends OnlineActivities {
                 monitor.addMyPositions(getMyPositions());
                 monitor.setupPhase = false;
                 readyButton.setVisibility(View.GONE);
-//                gameStartButton.setVisibility(View.VISIBLE);
             }
         });
 

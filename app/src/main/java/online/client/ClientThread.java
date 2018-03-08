@@ -21,7 +21,6 @@ import online.Monitor;
  */
 
 public class ClientThread extends Thread {
-    //    private final int ID = 1;
     private Handler handler;
     private Monitor monitor;
     private GridLayout mGrid;
@@ -134,7 +133,7 @@ public class ClientThread extends Thread {
             msg.arg1 = monitor.getScoreInt();
             msg.arg2 = points;
 
-            if(points < msg.arg1){
+            if (points < msg.arg1) {
                 msg.what = DEFEAT;
             } else {
                 msg.what = VICTORY;
@@ -146,15 +145,12 @@ public class ClientThread extends Thread {
         }
 
         while (!this.isInterrupted()) {
-
         }
-
         return;
     }
 
     public void killSockets() {
         if (socket != null) {
-//            socket.disconnect();
             socket.close();
         }
     }

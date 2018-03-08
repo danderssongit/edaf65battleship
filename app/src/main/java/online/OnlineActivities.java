@@ -128,7 +128,6 @@ public class OnlineActivities extends AppCompatActivity {
                     Integer pos = new Integer(square.getCoord());
                     checkForHit(monitor.getEnemyPositions(), pos, monitor);
                     updateView(mGrid, ENEMY_ID, monitor.getEnemyPositions(), monitor);
-//                    monitor.changeTurn(pos);
 
                 }
             });
@@ -137,29 +136,12 @@ public class OnlineActivities extends AppCompatActivity {
 
     }
 
-
-    public void shoot(int squareID) {
-        if (square.getCoord() == squareID) {
-            square.pressToggle();
-        }
-    }
-
     public ArrayList<Integer> getMyPositions() {
         return myPositions;
     }
 
 
     public void checkForHit(ArrayList<Integer> enemyPositions, int pos, Monitor monitor) {
-//        for (Square square : whatBoard(playerID)) {
-//            if ((square.getCoord() == squareID) && square.isShip()) {
-//                square.hit(); //set status to hit
-//                System.out.println("IT'S A HIT");
-//            } else if ((square.getCoord() == squareID)) {
-//                square.setPressed(); //set to miss instead
-//                System.out.println("IT'S A MISS");
-//            }
-//        }
-
         if (enemyPositions.contains(pos) && !square.isPressed()) {
             hits++;
             if (hits == NBR_SHIPS_TO_PLACE) {
@@ -174,7 +156,6 @@ public class OnlineActivities extends AppCompatActivity {
             System.out.println("IT'S A MISS");
         }
         square.setPressed();
-//        updateView(mGrid, playerID);
     }
 
     public void updateView(final GridLayout mGrid, int playerId, final ArrayList<Integer> enemyPositions, final Monitor monitor) {
@@ -186,7 +167,6 @@ public class OnlineActivities extends AppCompatActivity {
             this.square = sq;
             final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
             final TextView text = itemView.findViewById(R.id.text);
-            final TextView statusText = itemView.findViewById(R.id.status);
             itemView.setTag(square);
 
             if (playerId == ENEMY_ID) {
@@ -222,41 +202,6 @@ public class OnlineActivities extends AppCompatActivity {
             mGrid.addView(itemView);
         }
 
-    }
-
-
-    public void fillEnemyBoard(GridLayout mGrid, ArrayList<Integer> positions) {
-//        for (Square square : whatBoard(0)){                 //TODO: Get enemy board
-//            if(myPositions.contains(square.getCoord())){
-//                square.putShip();
-//            }
-//        }
-//        updateView(whatBoard(0));
-
-
-//        final LayoutInflater inflater = LayoutInflater.from(this);
-//        for (int i = 1; i <= NBR_ITEMS; i++) {
-//            final View itemView = inflater.inflate(R.layout.grid_item, mGrid, false);
-//            System.out.println("2");
-//            final TextView text = itemView.findViewById(R.id.text);
-//            text.setText("");
-//            square = new Square(i);
-//            if (myPositions.contains(new Integer(i))) {
-//                square.putShip();
-//                System.out.println(i);
-//            }
-//            itemView.setTag(square);
-//            whatBoard(0).add(square);
-//
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//                    square = (Square) v.getTag();
-//                    Integer pos = new Integer(square.getCoord());
-//                    checkForHit(mGrid, 0, pos);
-//                }
-//            });
-////            mGrid.addView(itemView);
-//        }
     }
 
     private ArrayList<Square> whatBoard(int playerID) {

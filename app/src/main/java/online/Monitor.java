@@ -2,29 +2,15 @@ package online;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.GridLayout;
-import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
-import online.server.HostGame;
-import se.lth.soc13dan.battleshipsedaf65.GameOver;
-import se.lth.soc13dan.battleshipsedaf65.MainMenu;
 
 /**
  * Created by otto on 2018-02-18.
  */
 
 public class Monitor extends OnlineActivities implements Serializable {
-    private int turn, score, enemyScore;
-    private int target;
+    private int score, enemyScore;
     public boolean myTurn, gameOver;
     private ArrayList<Integer> myPositions, enemyPositions;
 
@@ -32,34 +18,12 @@ public class Monitor extends OnlineActivities implements Serializable {
     public boolean setupPhase;
 
     public Monitor(boolean myTurn) {
-//        turn = 1;
         this.myTurn = myTurn;
         setupPhase = true;
         gameOver = false;
         enemyPositions = new ArrayList<>();
     }
 
-    public synchronized int waitTurn() {
-        while (!myTurn) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return target;
-    }
-
-    public synchronized void changeTurn(int i) {
-        turn = (turn + 1) % 2; // swaps between 1 and 0
-        target = i;
-        myTurn = !myTurn;
-        notifyAll();
-    }
-
-    public boolean isMyTurn() {
-        return myTurn;
-    }
 
     public void registerScore(int score) {
         this.score = score;
@@ -96,8 +60,6 @@ public class Monitor extends OnlineActivities implements Serializable {
             enemyPositions.add(Integer.parseInt(pos));
         }
         System.out.println("ENEMY HAS SHIPS ON: " + enemyPositions);
-        fillEnemyBoard(mGrid, enemyPositions);
-
     }
 
     public ArrayList<Integer> getEnemyPositions() {

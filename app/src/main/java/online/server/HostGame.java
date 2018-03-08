@@ -34,12 +34,10 @@ public class HostGame extends OnlineActivities {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_game);
 
-//        monitor = (Monitor) getIntent().getSerializableExtra("monitor");
-
-
         final TextView statusText = (TextView) findViewById(R.id.status);
-        final Monitor monitor = new Monitor(false);
+        final Button readyButton = (Button) this.findViewById(R.id.angry_btn);
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        final Monitor monitor = new Monitor(false);
         dialogBuilder.setPositiveButton("GG", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 finish();
@@ -88,25 +86,6 @@ public class HostGame extends OnlineActivities {
         mGrid = (GridLayout) findViewById(R.id.grid_layout);
         mGrid.setOnDragListener(new DragListener(mGrid));
 
-//        final Button gameStartButton = (Button) this.findViewById(R.id.ready_btn);
-//        gameStartButton.setText("START GAME");
-//        gameStartButton.setVisibility(View.GONE);
-//        gameStartButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (monitor.getEnemyPositions().isEmpty()) {
-//                    dialogBuilder.setMessage("No opponent found!");
-//                    AlertDialog alertDialog = dialogBuilder.create();
-//                    alertDialog.setCanceledOnTouchOutside(true);
-//                    alertDialog.show();
-//                } else {
-//                    gamePhase(mGrid, gameStartButton, true, monitor.getEnemyPositions(), monitor);
-//                    gameStartButton.setVisibility(View.GONE);
-//                }
-//            }
-//        });
-
-        final Button readyButton = (Button) this.findViewById(R.id.angry_btn);
         readyButton.setEnabled(false);
         readyButton.setVisibility(View.VISIBLE);
         readyButton.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +96,6 @@ public class HostGame extends OnlineActivities {
                 monitor.addMyPositions(getMyPositions());
                 monitor.setupPhase = false;
                 readyButton.setVisibility(View.GONE);
-//                gameStartButton.setVisibility(View.VISIBLE);
             }
         });
 
